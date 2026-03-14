@@ -65,7 +65,7 @@ export default function WifiPage({ data }) {
       {ConfirmUI}
 
       {/* Summary */}
-      <div className="stats-grid mb-4" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+      <div className="stats-grid mb-4">
         <div className="stat-card blue">
           <div className="stat-label">Total ISP Aktif</div>
           <div className="stat-value blue">{wifiIsp.filter(i=>i.status==='Aktif').length}</div>

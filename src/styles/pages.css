@@ -86,8 +86,8 @@
 /* ── Dashboard KPI Grid ─────────────────────────────────── */
 .dash-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
 }
 .kpi-card {
   background: var(--card);

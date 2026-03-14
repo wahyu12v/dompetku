@@ -153,7 +153,7 @@ export default function TransaksiPage({ data }) {
         })}
       </div>
 
-      <div className="stats-grid mb-4" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+      <div className="stats-grid mb-4">
         <StatCard label="Total Pemasukan"   value={fmtRp(totPms)}    color="green"                             sub={`${filtered.filter(t=>t.pemasukan>0).length} transaksi masuk`} />
         <StatCard label="Total Pengeluaran" value={fmtRp(totPgl)}    color="red"                               sub="Bulan ini" />
         <StatCard label="Selisih Bersih"    value={fmtRp(totBersih)} color={totBersih>=0?'green':'red'}         sub="Pemasukan − Pengeluaran" />

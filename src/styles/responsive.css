@@ -1,146 +1,67 @@
 /* ============================================================
-   RESPONSIVE.CSS — Tablet (≤1024px) & Mobile (≤768px, ≤480px)
+   RESPONSIVE.CSS
+   Natural responsive via auto-fit minmax + targeted fixes
    ============================================================ */
 
-/* ── Tablet (≤1024px) ───────────────────────────────────── */
-@media (max-width: 1024px) {
-
-  /* Sidebar narrower */
-  .sidebar { width: 210px; }
-  .main    { margin-left: 210px; }
-
-  /* KPI grid: 3 cols */
-  .dash-kpi-grid { grid-template-columns: repeat(3, 1fr); }
-
-  /* Stats grid: 2 cols */
-  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-
-  /* General grids */
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-
-  /* Page padding */
-  .page { padding: 20px 22px; }
-}
-
-/* ── Mobile (≤768px) ────────────────────────────────────── */
+/* ── Sidebar collapse on mobile ─────────────────────────── */
 @media (max-width: 768px) {
-
-  /* Sidebar hidden, toggled via hamburger */
   .sidebar {
-    width: 260px;
+    width: 270px;
     transform: translateX(-100%);
-    box-shadow: none;
   }
   .sidebar.open {
     transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+    box-shadow: 4px 0 32px rgba(0,0,0,0.18);
   }
-  .main         { margin-left: 0; }
+  .sidebar-overlay.show { display: block; }
+  .main         { margin-left: 0 !important; }
   .hamburger    { display: flex !important; }
   .topbar       { padding: 0 14px; }
   .topbar-date  { display: none; }
-  .page         { padding: 14px; }
+  .page         { padding: 12px; }
 
-  /* KPI: 2 cols */
-  .dash-kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .kpi-value     { font-size: 1rem !important; }
+  /* Table: force horizontal scroll */
+  .table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
 
-  /* Stats: 2 cols */
-  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
-
-  /* All grids → 1 col */
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
-  .col-span-2, .col-span-3  { grid-column: span 1 !important; }
-  .grid-auto { grid-template-columns: repeat(2, 1fr); }
-
-  /* Cards */
-  .card { padding: 14px; }
-
-  /* Table horizontal scroll */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table       { min-width: 480px; }
-
-  /* Month tabs: horizontal scroll */
+  /* Month tabs: horizontal scroll no wrap */
   .month-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
     scrollbar-width: none;
-    -ms-overflow-style: none;
   }
   .month-tabs::-webkit-scrollbar { display: none; }
+  .month-tab { flex-shrink: 0; }
 
-  /* Transaksi toolbar: stack */
-  .transaksi-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
-  .transaksi-search  { max-width: 100%; }
-  .transaksi-btn-group { display: flex; gap: 8px; }
+  /* Tabs horizontal scroll */
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; }
+
+  /* Transaksi toolbar stack */
+  .transaksi-toolbar { flex-direction: column; align-items: stretch; }
+  .transaksi-search  { max-width: 100% !important; }
+  .transaksi-btn-group { width: 100%; }
   .transaksi-btn-group .btn { flex: 1; }
 
-  /* Laporan toolbar: stack */
-  .laporan-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .laporan-saldo-awal { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .laporan-saldo-awal input { width: 100% !important; }
-
-  /* Form grid → 1 col */
+  /* Form 1 col */
   .form-grid { grid-template-columns: 1fr !important; }
   .form-group.full { grid-column: span 1 !important; }
 
-  /* Modal: full width */
-  .modal { max-width: calc(100vw - 20px) !important; }
-  .modal-body   { padding: 14px 16px !important; }
-  .modal-footer { padding: 12px 16px !important; }
-  .modal-header { padding: 14px 16px 12px !important; }
+  /* Modal full width */
+  .modal-overlay { padding: 10px; }
+  .modal { max-width: 100% !important; }
 
-  /* Confirm box */
-  .confirm-box { max-width: calc(100vw - 32px) !important; }
-
-  /* Wifi ISP grid: 2 cols */
-  .wifi-isp-grid { grid-template-columns: 1fr 1fr !important; }
-
-  /* Tabs: horizontal scroll */
-  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
-  .tabs::-webkit-scrollbar { display: none; }
-
-  /* Section header stack */
-  .section-header { flex-wrap: wrap; gap: 8px; }
-
-  /* Recharts responsive */
-  .recharts-wrapper { max-width: 100% !important; }
-
-  /* Auth page */
-  .auth-card { padding: 24px 18px; }
+  /* Laporan toolbar stack */
+  .laporan-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 
-/* ── Small Mobile (≤480px) ──────────────────────────────── */
-@media (max-width: 480px) {
-
-  /* KPI: 1 col */
-  .dash-kpi-grid { grid-template-columns: 1fr !important; }
-  .stats-grid    { grid-template-columns: 1fr !important; }
-  .grid-auto     { grid-template-columns: 1fr !important; }
-
-  /* Page */
-  .page   { padding: 10px !important; }
-  .card   { padding: 12px !important; }
-
-  /* KPI value smaller */
-  .kpi-value   { font-size: 0.95rem !important; }
-  .stat-value  { font-size: 1rem    !important; }
-
-  /* Wifi ISP grid: 1 col */
-  .wifi-isp-grid { grid-template-columns: 1fr !important; }
-
-  /* Tables: tighter */
-  th, td { padding: 8px 10px !important; font-size: 0.78rem !important; }
-
-  /* TopBar title shorter */
-  .topbar-title { font-size: 0.92rem !important; }
-
-  /* Badge smaller */
-  .badge { font-size: 0.63rem !important; padding: 2px 7px !important; }
-
-  /* Kategori chips wrap */
-  .kategori-list { gap: 6px; }
-  .kategori-chip { font-size: 0.78rem !important; }
+/* ── Very small phones ──────────────────────────────────── */
+@media (max-width: 400px) {
+  .page  { padding: 8px; }
+  .card  { padding: 12px; }
+  .kpi-card { padding: 10px 12px; }
+  .kpi-value { font-size: 0.9rem !important; }
 }

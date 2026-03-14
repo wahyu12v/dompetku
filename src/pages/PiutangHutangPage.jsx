@@ -64,7 +64,7 @@ export default function PiutangHutangPage({ data }) {
       </div>
 
       {/* Stats */}
-      <div className="stats-grid mb-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <div className="stats-grid mb-4">
         <StatCard
           label={isPiutang ? 'Total Piutang' : 'Total Hutang'}
           value={fmtRp(totalJumlah)}

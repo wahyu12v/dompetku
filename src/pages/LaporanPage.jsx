@@ -101,7 +101,7 @@ export default function LaporanPage({ data }) {
       {/* ── DRILL DOWN: Monthly view ─────────────────────── */}
       {isDrill ? (
         <>
-          <div className="stats-grid mb-4" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+          <div className="stats-grid mb-4">
             <StatCard label={`Pemasukan ${fullMonth(parseInt(bulanDrill))} ${year}`} value={fmtRp(drillPms)} color="blue" sub="" />
             <StatCard label="Total Pengeluaran"  value={fmtRp(drillPgl)} color="red"  sub="Harian + Tagihan" />
             <StatCard label="Bersih Bulan Ini"   value={fmtRp(drillPms-drillPgl)} color={(drillPms-drillPgl)>=0?'green':'red'} sub="" />
@@ -171,7 +171,7 @@ export default function LaporanPage({ data }) {
       ) : (
         /* ── ANNUAL view ──────────────────────────────────── */
         <>
-          <div className="stats-grid mb-4" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
+          <div className="stats-grid mb-4">
             <StatCard label={`Total Pemasukan ${year}`}  value={fmtRp(totalPms)} color="blue" sub="" />
             <StatCard label={`Total Pengeluaran ${year}`} value={fmtRp(totalPgl)} color="red"  sub="" />
             <StatCard label={`Bersih ${year}`}           value={fmtRp(totalPms-totalPgl)} color={(totalPms-totalPgl)>=0?'green':'red'} sub="" />

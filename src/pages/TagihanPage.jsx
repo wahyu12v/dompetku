@@ -79,7 +79,7 @@ export default function TagihanPage({ data }) {
       </div>
 
       {/* Stats */}
-      <div className="stats-grid mb-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <div className="stats-grid mb-4">
         <StatCard label="Total Tagihan"    value={fmtRp(totAll)}   color="blue"  sub={`${inMonth.length} tagihan`} />
         <StatCard label="Sudah Dibayar"    value={fmtRp(totSudah)} color="green" sub="Lunas" />
         <StatCard label="Belum Dibayar"    value={fmtRp(totBelum)} color={totBelum > 0 ? 'red' : 'green'} sub={totBelum > 0 ? 'Perlu dibayar' : 'Semua lunas ✓'} />

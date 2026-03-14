@@ -2,7 +2,7 @@
    LAYOUT.CSS
    ============================================================ */
 
-.app-shell { display: flex; min-height: 100vh; }
+.app-shell { display: flex; min-height: 100vh; overflow-x: hidden; }
 
 /* ── Sidebar ────────────────────────────────────────────── */
 .sidebar {
@@ -95,9 +95,9 @@
 .page { padding: 24px 28px; flex: 1; }
 
 /* ── Grids ──────────────────────────────────────────────── */
-.grid-2    { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-2    { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.grid-3    { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.grid-4    { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 .col-span-2 { grid-column: span 2; }
 .col-span-3 { grid-column: span 3; }

@@ -27,7 +27,7 @@ export default function AsetPage({ data }) {
     <div className="fade-in">
       {ConfirmUI}
       {/* Stats */}
-      <div className="stats-grid mb-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <div className="stats-grid mb-4">
         <StatCard
           label="Total Harga Beli"
           value={fmtRp(totalBeli)}
