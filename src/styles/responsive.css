@@ -1,67 +1,78 @@
 /* ============================================================
-   RESPONSIVE.CSS
-   Natural responsive via auto-fit minmax + targeted fixes
+   RESPONSIVE.CSS — Mobile fixes
    ============================================================ */
 
-/* ── Sidebar collapse on mobile ─────────────────────────── */
 @media (max-width: 768px) {
-  .sidebar {
-    width: 270px;
-    transform: translateX(-100%);
-  }
-  .sidebar.open {
-    transform: translateX(0);
-    box-shadow: 4px 0 32px rgba(0,0,0,0.18);
-  }
+
+  /* ── Layout ─────────────────────────────────────────────── */
+  .sidebar { width: 270px; transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 32px rgba(0,0,0,0.18); }
   .sidebar-overlay.show { display: block; }
-  .main         { margin-left: 0 !important; }
-  .hamburger    { display: flex !important; }
-  .topbar       { padding: 0 14px; }
-  .topbar-date  { display: none; }
-  .page         { padding: 12px; }
+  .main { margin-left: 0 !important; }
+  .hamburger { display: flex !important; }
+  .topbar { padding: 0 14px; }
+  .topbar-date { display: none; }
+  .page { padding: 12px; }
 
-  /* Table: force horizontal scroll */
-  .table-wrap {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
+  /* ── Stats cards — 1 col on mobile ──────────────────────── */
+  .stats-grid {
+    grid-template-columns: 1fr !important;
   }
 
-  /* Month tabs: horizontal scroll no wrap */
+  /* ── KPI cards — 2 col on mobile ────────────────────────── */
+  .dash-kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* ── Grids → 1 col ──────────────────────────────────────── */
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+  .col-span-2, .col-span-3 { grid-column: span 1 !important; }
+
+  /* ── HIDE TABLE, SHOW MOBILE CARDS ──────────────────────── */
+  .mobile-hide { display: none !important; }
+  .mobile-card-list { display: flex !important; flex-direction: column; gap: 10px; }
+
+  /* ── Month tabs ──────────────────────────────────────────── */
   .month-tabs {
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
+    padding-bottom: 4px;
     scrollbar-width: none;
   }
   .month-tabs::-webkit-scrollbar { display: none; }
   .month-tab { flex-shrink: 0; }
 
-  /* Tabs horizontal scroll */
+  /* ── Tabs ────────────────────────────────────────────────── */
   .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
   .tab { flex-shrink: 0; }
 
-  /* Transaksi toolbar stack */
+  /* ── Toolbar ─────────────────────────────────────────────── */
   .transaksi-toolbar { flex-direction: column; align-items: stretch; }
-  .transaksi-search  { max-width: 100% !important; }
+  .transaksi-search { max-width: 100% !important; }
   .transaksi-btn-group { width: 100%; }
   .transaksi-btn-group .btn { flex: 1; }
+  .laporan-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .section-header { flex-wrap: wrap; gap: 8px; }
 
-  /* Form 1 col */
+  /* ── Form ────────────────────────────────────────────────── */
   .form-grid { grid-template-columns: 1fr !important; }
   .form-group.full { grid-column: span 1 !important; }
 
-  /* Modal full width */
+  /* ── Modal ───────────────────────────────────────────────── */
   .modal-overlay { padding: 10px; }
   .modal { max-width: 100% !important; }
 
-  /* Laporan toolbar stack */
-  .laporan-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  /* ── WiFi ISP grid ───────────────────────────────────────── */
+  .wifi-isp-grid { grid-template-columns: 1fr 1fr !important; }
+  .wifi-isp-header { flex-direction: column; gap: 8px; }
+  .wifi-isp-header > div:last-child { flex-wrap: wrap; }
 }
 
-/* ── Very small phones ──────────────────────────────────── */
 @media (max-width: 400px) {
-  .page  { padding: 8px; }
-  .card  { padding: 12px; }
-  .kpi-card { padding: 10px 12px; }
-  .kpi-value { font-size: 0.9rem !important; }
+  .dash-kpi-grid { grid-template-columns: 1fr !important; }
+  .page { padding: 8px; }
+  .wifi-isp-grid { grid-template-columns: 1fr !important; }
 }

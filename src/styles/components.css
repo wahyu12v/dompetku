@@ -280,3 +280,6 @@ tr:hover td { background: var(--bg3); }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
   .modal { max-width: 100%; }
 }
+
+/* ── Mobile card list (default hidden, shown via responsive.css) ── */
+.mobile-card-list { display: none; }
