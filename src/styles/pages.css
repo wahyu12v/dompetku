@@ -1,0 +1,117 @@
+/* ============================================================
+   PAGES.CSS
+   ============================================================ */
+
+/* ── Auth ───────────────────────────────────────────────── */
+.auth-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
+  padding: 20px;
+}
+.auth-card {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 40px;
+  width: 100%; max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+.auth-logo { text-align: center; margin-bottom: 28px; }
+.auth-logo h1 {
+  font-size: 2rem; font-weight: 800; letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.auth-logo p { color: var(--text3); font-size: 0.85rem; margin-top: 6px; }
+.auth-footer { text-align: center; margin-top: 18px; font-size: 0.78rem; color: var(--text3); }
+.auth-footer span { color: var(--accent); cursor: pointer; font-weight: 600; }
+.auth-footer span:hover { text-decoration: underline; }
+
+/* ── Transaksi ──────────────────────────────────────────── */
+.transaksi-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
+}
+.transaksi-search    { max-width: 280px; flex: 1; }
+.transaksi-btn-group { display: flex; gap: 8px; }
+
+/* ── Laporan ────────────────────────────────────────────── */
+.laporan-toolbar {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; flex-wrap: wrap; justify-content: space-between;
+}
+.laporan-year-select { display: flex; align-items: center; gap: 8px; }
+.laporan-saldo-awal  { display: flex; align-items: center; gap: 8px; }
+.laporan-saldo-awal label { font-size: 0.83rem; color: var(--text2); white-space: nowrap; font-weight: 600; }
+.laporan-saldo-awal input { width: 170px; }
+
+/* ── Aset ───────────────────────────────────────────────── */
+.aset-note {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: var(--yellow2);
+  background: var(--yellow-bg); border: 1.5px solid #fcd34d;
+  padding: 9px 14px; border-radius: var(--radius2); margin-bottom: 16px;
+}
+
+/* ── Tagihan overdue ────────────────────────────────────── */
+.tagihan-overdue { color: var(--red) !important; font-weight: 600; }
+
+/* ── Dashboard tagihan item ─────────────────────────────── */
+.dashboard-tagihan-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.dashboard-tagihan-item:last-child { border-bottom: none; }
+
+/* ── WiFi ───────────────────────────────────────────────── */
+.wifi-isp-card {
+  background: linear-gradient(135deg, var(--blue-bg), var(--purple-bg));
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 10px;
+}
+.wifi-isp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.wifi-isp-name   { font-size: 1rem; font-weight: 700; }
+.wifi-isp-grid   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.wifi-isp-field label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); display: block; margin-bottom: 3px; }
+.wifi-isp-field span  { font-size: 0.83rem; font-family: var(--mono); color: var(--text); }
+.wifi-password { font-family: var(--mono); background: var(--bg3); padding: 2px 8px; border-radius: var(--radius3); border: 1px solid var(--border); font-size: 0.8rem; }
+
+/* ── Pengaturan Kategori ────────────────────────────────── */
+.kategori-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.kategori-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px;
+  background: var(--bg3); border: 1.5px solid var(--border);
+  font-size: 0.82rem; font-weight: 500;
+}
+
+/* ── Dashboard KPI Grid ─────────────────────────────────── */
+.dash-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  border-top: 3px solid var(--border2);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.kpi-green  { border-top-color: var(--green); }
+.kpi-blue   { border-top-color: var(--blue); }
+.kpi-red    { border-top-color: var(--red); }
+.kpi-yellow { border-top-color: var(--yellow); }
+.kpi-purple { border-top-color: var(--purple); }
+.kpi-orange { border-top-color: var(--orange); }
+.kpi-label {
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text3); margin-bottom: 7px;
+}
+.kpi-value {
+  font-family: var(--mono);
+  font-size: 1.15rem; font-weight: 700; line-height: 1.2; margin-bottom: 4px;
+}
+.kpi-sub { font-size: 0.68rem; color: var(--text3); }

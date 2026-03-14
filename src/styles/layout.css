@@ -1,0 +1,124 @@
+/* ============================================================
+   LAYOUT.CSS
+   ============================================================ */
+
+.app-shell { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ────────────────────────────────────────────── */
+.sidebar {
+  width: 248px;
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.04);
+}
+
+.sidebar-logo {
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sidebar-logo p { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
+
+.sidebar-user {
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.user-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; font-weight: 700; color: white; flex-shrink: 0;
+}
+.user-info   { flex: 1; min-width: 0; }
+.user-name   { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-email  { font-size: 0.7rem; color: var(--text3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.sidebar-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+
+.nav-section {
+  padding: 10px 20px 4px;
+  font-size: 0.63rem; font-weight: 700;
+  letter-spacing: 1.5px; color: var(--text3);
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px; cursor: pointer;
+  font-size: 0.86rem; font-weight: 500; color: var(--text2);
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+  user-select: none;
+  border-radius: 0 6px 6px 0;
+  margin: 1px 8px 1px 0;
+}
+.nav-item:hover  { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: var(--blue-bg); color: var(--accent2); border-left-color: var(--accent2); font-weight: 600; }
+.nav-icon  { font-size: 15px; width: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.nav-label { flex: 1; }
+
+.sidebar-bottom    { padding: 8px 0; border-top: 1px solid var(--border); }
+.nav-item.logout   { color: var(--red); opacity: 0.75; }
+.nav-item.logout:hover { background: var(--red-bg); color: var(--red); opacity: 1; }
+
+/* ── Main ───────────────────────────────────────────────── */
+.main { margin-left: 248px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+.topbar {
+  height: 58px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 12px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.topbar-title   { font-size: 1.05rem; font-weight: 700; flex: 1; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.topbar-date    { font-size: 0.75rem; color: var(--text3); font-family: var(--mono); }
+
+.page { padding: 24px 28px; flex: 1; }
+
+/* ── Grids ──────────────────────────────────────────────── */
+.grid-2    { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title  { font-size: 0.95rem; font-weight: 700; }
+
+/* ── Hamburger (hidden by default, shown on mobile) ─────── */
+.hamburger {
+  display: none;
+  background: none; border: none;
+  color: var(--text2); cursor: pointer;
+  padding: 6px; border-radius: var(--radius3);
+  font-size: 1.2rem;
+}
+.hamburger:hover { background: var(--bg3); color: var(--text); }
+
+/* ── Sidebar overlay (mobile backdrop) ──────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 99;
+}
