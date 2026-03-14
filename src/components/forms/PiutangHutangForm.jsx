@@ -3,6 +3,7 @@
 // ============================================================
 import { useState } from 'react';
 import Modal from '../Modal';
+import RupiahInput from '../RupiahInput';
 import { STATUS_HUTANG } from '../../utils/constants';
 import { genId, today } from '../../utils/helpers';
 
@@ -21,7 +22,7 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
   const isPiutang = mode === 'piutang';
 
   const [form, setForm] = useState(item
-    ? { ...item, jumlah: item.jumlah || '', dibayar: item.dibayar || '' }
+    ? { ...item, jumlah: item.jumlah || 0, dibayar: item.dibayar || 0 }
     : DEFAULT(mode)
   );
 
@@ -69,26 +70,12 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
 
         <div className="form-group">
           <label className="form-label">Jumlah (Rp)</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="0"
-            value={form.jumlah}
-            onChange={set('jumlah')}
-            min="0"
-          />
+          <RupiahInput value={form.jumlah} onChange={v => setForm(f => ({ ...f, jumlah: v }))} />
         </div>
 
         <div className="form-group">
           <label className="form-label">Sudah Dibayar (Rp)</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="0"
-            value={form.dibayar}
-            onChange={set('dibayar')}
-            min="0"
-          />
+          <RupiahInput value={form.dibayar} onChange={v => setForm(f => ({ ...f, dibayar: v }))} />
         </div>
 
         <div className="form-group full">

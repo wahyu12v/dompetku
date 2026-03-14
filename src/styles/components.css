@@ -161,8 +161,8 @@ tr:hover td { background: var(--bg3); }
   position: fixed; inset: 0;
   background: transparent;
   display: flex; align-items: center; justify-content: center;
-  z-index: 300; padding: 20px;
-  /* backdrop-filter removed per user request */
+  z-index: 300;
+  padding: 80px 20px 20px; /* padding-top 80px = clear topbar 58px + gap */
   animation: fadeOverlay 0.2s ease;
 }
 @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }

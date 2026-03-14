@@ -3,6 +3,7 @@
 // ============================================================
 import { useState } from 'react';
 import Modal from '../Modal';
+import RupiahInput from '../RupiahInput';
 import { TAGIHAN_OPTIONS, STATUS_BAYAR } from '../../utils/constants';
 import { genId, today } from '../../utils/helpers';
 
@@ -17,7 +18,7 @@ const DEFAULT = {
 
 export default function TagihanForm({ item, onSave, onClose }) {
   const [form, setForm] = useState(item
-    ? { ...item, nominal: item.nominal || '' }
+    ? { ...item, nominal: item.nominal || 0 }
     : DEFAULT
   );
 
@@ -50,14 +51,7 @@ export default function TagihanForm({ item, onSave, onClose }) {
 
         <div className="form-group">
           <label className="form-label">Nominal (Rp)</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="0"
-            value={form.nominal}
-            onChange={set('nominal')}
-            min="0"
-          />
+          <RupiahInput value={form.nominal} onChange={v => setForm(f => ({ ...f, nominal: v }))} />
         </div>
 
         <div className="form-group">

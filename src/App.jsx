@@ -13,7 +13,7 @@ import WifiPage          from './pages/WifiPage';
 import LaporanPage       from './pages/LaporanPage';
 import PengaturanPage    from './pages/PengaturanPage';
 
-function AppShell({ user, logout }) {
+function AppShell({ user, logout, changePassword }) {
   const data = useData(user.username);
   const [page,        setPage]        = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,16 +27,20 @@ function AppShell({ user, logout }) {
       case 'aset':       return <AsetPage          data={data} />;
       case 'wifi':       return <WifiPage          data={data} />;
       case 'laporan':    return <LaporanPage       data={data} />;
-      case 'pengaturan': return <PengaturanPage    data={data} />;
+      case 'pengaturan': return <PengaturanPage    data={data} changePassword={changePassword} />;
       default:           return <DashboardPage     data={data} />;
     }
   };
 
   return (
     <div className="app-shell">
-      <Sidebar user={user} page={page} onNavigate={setPage} onLogout={logout} open={sidebarOpen} onClose={()=>setSidebarOpen(false)} />
+      <Sidebar
+        user={user} page={page}
+        onNavigate={setPage} onLogout={logout}
+        open={sidebarOpen} onClose={() => setSidebarOpen(false)}
+      />
       <div className="main">
-        <Topbar page={page} onMenuToggle={()=>setSidebarOpen(v=>!v)} />
+        <Topbar page={page} onMenuToggle={() => setSidebarOpen(v => !v)} />
         <div className="page">{renderPage()}</div>
       </div>
     </div>
@@ -44,7 +48,7 @@ function AppShell({ user, logout }) {
 }
 
 export default function App() {
-  const { user, login, register, logout } = useAuth();
+  const { user, login, register, logout, changePassword } = useAuth();
   if (!user) return <AuthPage onLogin={login} onRegister={register} />;
-  return <AppShell user={user} logout={logout} />;
+  return <AppShell user={user} logout={logout} changePassword={changePassword} />;
 }

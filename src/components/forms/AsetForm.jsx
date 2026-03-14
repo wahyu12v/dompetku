@@ -3,6 +3,7 @@
 // ============================================================
 import { useState } from 'react';
 import Modal from '../Modal';
+import RupiahInput from '../RupiahInput';
 import { genId } from '../../utils/helpers';
 
 const DEFAULT = {
@@ -19,8 +20,8 @@ export default function AsetForm({ item, onSave, onClose }) {
   const [form, setForm] = useState(item
     ? {
         ...item,
-        belitotal:  item.belitotal  || '',
-        hargaPasar: item.hargaPasar || '',
+        belitotal:  item.belitotal  || 0,
+        hargaPasar: item.hargaPasar || 0,
       }
     : DEFAULT
   );
@@ -66,26 +67,12 @@ export default function AsetForm({ item, onSave, onClose }) {
 
         <div className="form-group">
           <label className="form-label">Harga Beli Total (Rp)</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="0"
-            value={form.belitotal}
-            onChange={set('belitotal')}
-            min="0"
-          />
+          <RupiahInput value={form.belitotal} onChange={v => setForm(f => ({ ...f, belitotal: v }))} />
         </div>
 
         <div className="form-group">
           <label className="form-label">Harga Pasar Sekarang (Rp)</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="Isi manual tiap bulan"
-            value={form.hargaPasar}
-            onChange={set('hargaPasar')}
-            min="0"
-          />
+          <RupiahInput value={form.hargaPasar} onChange={v => setForm(f => ({ ...f, hargaPasar: v }))} placeholder="Isi manual tiap bulan" />
           <div className="form-hint">Update ini setiap bulan untuk tracking untung/rugi</div>
         </div>
 

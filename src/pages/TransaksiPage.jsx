@@ -3,12 +3,13 @@ import StatCard from '../components/StatCard';
 import Modal from '../components/Modal';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp, fmtDate, monthName } from '../utils/format';
+import RupiahInput from '../components/RupiahInput';
 import { filterByMonth, sumBy, getMonths, currentYearMonth, today, genId } from '../utils/helpers';
 
 function PemasukanForm({ item, sumberOptions, onSave, onClose }) {
   const [form, setForm] = useState(item
     ? { ...item, pemasukan: item.pemasukan || '' }
-    : { tanggal: today(), pemasukan: '', sumber: sumberOptions[0] || 'Jasa Freelance', ket: '' }
+    : { tanggal: today(), pemasukan: 0, sumber: sumberOptions[0] || 'Jasa Freelance', ket: '' }
   );
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
   const save = () => onSave({ ...form, id: form.id || genId(), pemasukan: Number(form.pemasukan) || 0, pengeluaran: 0, tujuan: 'Tidak ada pengeluaran' });
@@ -16,7 +17,7 @@ function PemasukanForm({ item, sumberOptions, onSave, onClose }) {
     <Modal title={item ? 'Edit Pemasukan' : '+ Tambah Pemasukan'} onClose={onClose} onSave={save}>
       <div className="form-grid">
         <div className="form-group"><label className="form-label">Tanggal</label><input type="date" className="form-input" value={form.tanggal} onChange={set('tanggal')} /></div>
-        <div className="form-group"><label className="form-label">Jumlah (Rp)</label><input type="number" className="form-input" placeholder="0" value={form.pemasukan} onChange={set('pemasukan')} /></div>
+        <div className="form-group"><label className="form-label">Jumlah (Rp)</label><RupiahInput value={form.pemasukan} onChange={v => setForm(f => ({ ...f, pemasukan: v }))} /></div>
         <div className="form-group full"><label className="form-label">Sumber</label><select className="form-select" value={form.sumber} onChange={set('sumber')}>{sumberOptions.map(o => <option key={o} value={o}>{o}</option>)}</select></div>
         <div className="form-group full"><label className="form-label">Keterangan</label><input className="form-input" placeholder="Opsional" value={form.ket} onChange={set('ket')} /></div>
       </div>
@@ -35,7 +36,7 @@ function PengeluaranForm({ item, tujuanOptions, onSave, onClose }) {
     <Modal title={item ? 'Edit Pengeluaran' : '- Tambah Pengeluaran'} onClose={onClose} onSave={save}>
       <div className="form-grid">
         <div className="form-group"><label className="form-label">Tanggal</label><input type="date" className="form-input" value={form.tanggal} onChange={set('tanggal')} /></div>
-        <div className="form-group"><label className="form-label">Jumlah (Rp)</label><input type="number" className="form-input" placeholder="0" value={form.pengeluaran} onChange={set('pengeluaran')} /></div>
+        <div className="form-group"><label className="form-label">Jumlah (Rp)</label><RupiahInput value={form.pengeluaran} onChange={v => setForm(f => ({ ...f, pengeluaran: v }))} /></div>
         <div className="form-group full"><label className="form-label">Tujuan</label><select className="form-select" value={form.tujuan} onChange={set('tujuan')}>{tujuanOptions.map(o => <option key={o} value={o}>{o}</option>)}</select></div>
         <div className="form-group full"><label className="form-label">Keterangan</label><input className="form-input" placeholder="Opsional" value={form.ket} onChange={set('ket')} /></div>
       </div>
@@ -51,9 +52,9 @@ function EditForm({ item, sumberOptions, tujuanOptions, onSave, onClose }) {
     <Modal title="Edit Transaksi" onClose={onClose} onSave={save}>
       <div className="form-grid">
         <div className="form-group"><label className="form-label">Tanggal</label><input type="date" className="form-input" value={form.tanggal} onChange={set('tanggal')} /></div>
-        <div className="form-group"><label className="form-label">Pemasukan (Rp)</label><input type="number" className="form-input" value={form.pemasukan} onChange={set('pemasukan')} /></div>
+        <div className="form-group"><label className="form-label">Pemasukan (Rp)</label><RupiahInput value={Number(form.pemasukan)||0} onChange={v => setForm(f => ({ ...f, pemasukan: v }))} /></div>
         <div className="form-group"><label className="form-label">Sumber</label><select className="form-select" value={form.sumber} onChange={set('sumber')}>{sumberOptions.map(o => <option key={o} value={o}>{o}</option>)}</select></div>
-        <div className="form-group"><label className="form-label">Pengeluaran (Rp)</label><input type="number" className="form-input" value={form.pengeluaran} onChange={set('pengeluaran')} /></div>
+        <div className="form-group"><label className="form-label">Pengeluaran (Rp)</label><RupiahInput value={Number(form.pengeluaran)||0} onChange={v => setForm(f => ({ ...f, pengeluaran: v }))} /></div>
         <div className="form-group"><label className="form-label">Tujuan</label><select className="form-select" value={form.tujuan} onChange={set('tujuan')}>{tujuanOptions.map(o => <option key={o} value={o}>{o}</option>)}</select></div>
         <div className="form-group"><label className="form-label">Keterangan</label><input className="form-input" value={form.ket} onChange={set('ket')} /></div>
       </div>

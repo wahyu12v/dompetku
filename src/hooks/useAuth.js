@@ -1,13 +1,7 @@
-// ============================================================
-// useAuth.js — Authentication hook
-// ============================================================
 import { useState } from 'react';
 import { Storage } from '../utils/storage';
 import { genId, today } from '../utils/helpers';
-import {
-  SEED_TRANSAKSI, SEED_TAGIHAN, SEED_PIUTANG, SEED_HUTANG,
-  SEED_ASET, SEED_SALDO_AWAL, SEED_WIFI_ISP, SEED_WIFI_BAYAR, SEED_KATEGORI,
-} from '../utils/constants';
+import { DEFAULT_SUMBER, DEFAULT_TUJUAN } from '../utils/constants';
 
 export function useAuth() {
   const [user, setUser] = useState(() => Storage.getSession());
@@ -32,15 +26,16 @@ export function useAuth() {
     const newUser = { id: genId(), username: username.trim(), name: name.trim(), password, createdAt: today() };
     Storage.setUsers([...users, newUser]);
 
-    Storage.set(username, 'transaksi',  SEED_TRANSAKSI);
-    Storage.set(username, 'tagihan',    SEED_TAGIHAN);
-    Storage.set(username, 'piutang',    SEED_PIUTANG);
-    Storage.set(username, 'hutang',     SEED_HUTANG);
-    Storage.set(username, 'aset',       SEED_ASET);
-    Storage.set(username, 'saldoAwal',  SEED_SALDO_AWAL);
-    Storage.set(username, 'wifiIsp',    SEED_WIFI_ISP);
-    Storage.set(username, 'wifiBayar',  SEED_WIFI_BAYAR);
-    Storage.set(username, 'kategori',   SEED_KATEGORI);
+    // Semua data kosong — user input sendiri dari awal
+    Storage.set(username, 'transaksi',  []);
+    Storage.set(username, 'tagihan',    []);
+    Storage.set(username, 'piutang',    []);
+    Storage.set(username, 'hutang',     []);
+    Storage.set(username, 'aset',       []);
+    Storage.set(username, 'saldoAwal',  0);
+    Storage.set(username, 'wifiIsp',    []);
+    Storage.set(username, 'wifiBayar',  []);
+    Storage.set(username, 'kategori',   { sumber: [...DEFAULT_SUMBER], tujuan: [...DEFAULT_TUJUAN] });
 
     Storage.setSession(newUser);
     setUser(newUser);
@@ -49,5 +44,18 @@ export function useAuth() {
 
   const logout = () => { Storage.clearSession(); setUser(null); };
 
-  return { user, login, register, logout };
+  // Ubah password
+  const changePassword = (oldPassword, newPassword) => {
+    if (oldPassword !== user.password) return 'Password lama salah';
+    if (newPassword.length < 4) return 'Password baru minimal 4 karakter';
+
+    const users = Storage.getUsers();
+    const updated = { ...user, password: newPassword };
+    Storage.setUsers(users.map((u) => u.username === user.username ? updated : u));
+    Storage.setSession(updated);
+    setUser(updated);
+    return null;
+  };
+
+  return { user, login, register, logout, changePassword };
 }
