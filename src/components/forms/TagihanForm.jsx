@@ -4,8 +4,10 @@
 import { useState } from 'react';
 import Modal from '../Modal';
 import RupiahInput from '../RupiahInput';
-import { TAGIHAN_OPTIONS, STATUS_BAYAR } from '../../utils/constants';
+import { TAGIHAN_OPTIONS } from '../../utils/constants';
 import { genId, today } from '../../utils/helpers';
+
+const STATUS_BAYAR = ['Sudah dibayar','Belum dibayar','Belum Pasti'];
 
 const DEFAULT = {
   tanggal: today(),

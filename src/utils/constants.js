@@ -1,5 +1,5 @@
 // ============================================================
-// constants.js — App-wide constants, nav, seed data
+// constants.js
 // ============================================================
 
 export const DEFAULT_SUMBER = [
@@ -19,10 +19,6 @@ export const TAGIHAN_OPTIONS = [
   'Paket Internet','SPP/LPK','Uang Sewa','Lainya',
 ];
 
-export const STATUS_BAYAR  = ['Sudah dibayar','Belum dibayar','Belum Pasti'];
-export const STATUS_HUTANG = ['Belum','Lunas','Tidak Ada'];
-
-// ── Nav ────────────────────────────────────────────────────
 export const NAV_ITEMS = [
   { id: 'dashboard',   label: 'Dashboard',            icon: '◈',  section: 'utama' },
   { id: 'transaksi',   label: 'Transaksi Harian',     icon: '⇄',  section: 'utama' },
@@ -49,103 +45,70 @@ export const PAGE_TITLES = {
   aset:       'Aset & Investasi',
   wifi:       'WiFi & Internet',
   laporan:    'Laporan & Grafik',
-  pengaturan: 'Pengaturan Kategori',
-};
-
-// ── Seed Data ──────────────────────────────────────────────
-export const SEED_TRANSAKSI = [
-  { id:'t1',  tanggal:'2025-12-01', pemasukan:80000,   sumber:'Joki',             pengeluaran:50000,   tujuan:'Pegangan',             ket:'' },
-  { id:'t2',  tanggal:'2025-12-02', pemasukan:80000,   sumber:'Bagi Hasil',       pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'' },
-  { id:'t3',  tanggal:'2025-12-03', pemasukan:80000,   sumber:'Joki',             pengeluaran:50000,   tujuan:'Pegangan',             ket:'' },
-  { id:'t4',  tanggal:'2025-12-05', pemasukan:80000,   sumber:'Penjualan',        pengeluaran:50000,   tujuan:'Beli Kebutuhan',       ket:'' },
-  { id:'t5',  tanggal:'2025-12-11', pemasukan:130000,  sumber:'Jasa Freelance',   pengeluaran:50000,   tujuan:'Beli Kebutuhan',       ket:'' },
-  { id:'t6',  tanggal:'2025-12-12', pemasukan:526000,  sumber:'Jasa Freelance',   pengeluaran:650000,  tujuan:'Beli Kebutuhan',       ket:'' },
-  { id:'t7',  tanggal:'2025-12-13', pemasukan:360000,  sumber:'Penjualan',        pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'' },
-  { id:'t8',  tanggal:'2025-12-15', pemasukan:280000,  sumber:'Jasa Freelance',   pengeluaran:201000,  tujuan:'Keperluan Keluarga',   ket:'' },
-  { id:'t9',  tanggal:'2025-12-16', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:2283000, tujuan:'Keperluan Keluarga',   ket:'' },
-  { id:'t10', tanggal:'2025-12-17', pemasukan:400000,  sumber:'Jasa Freelance',   pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'' },
-  { id:'t11', tanggal:'2025-12-26', pemasukan:653000,  sumber:'Reksadana',        pengeluaran:203000,  tujuan:'Keperluan Keluarga',   ket:'' },
-  { id:'t12', tanggal:'2025-12-29', pemasukan:949000,  sumber:'Bagi Hasil',       pengeluaran:505000,  tujuan:'Keperluan Keluarga',   ket:'' },
-  { id:'t13', tanggal:'2026-01-03', pemasukan:1222000, sumber:'Jasa Freelance',   pengeluaran:1000000, tujuan:'Keluarga',             ket:'' },
-  { id:'t14', tanggal:'2026-01-05', pemasukan:1450000, sumber:'Jasa Freelance',   pengeluaran:1302500, tujuan:'Transfer Internal',    ket:'' },
-  { id:'t15', tanggal:'2026-01-06', pemasukan:2300000, sumber:'Joki',             pengeluaran:2000000, tujuan:'Beli Kebutuhan',       ket:'' },
-  { id:'t16', tanggal:'2026-01-09', pemasukan:850000,  sumber:'Bagi Hasil',       pengeluaran:600000,  tujuan:'Keluarga',             ket:'paket bapak 100' },
-  { id:'t17', tanggal:'2026-01-13', pemasukan:1229000, sumber:'Penjualan Online', pengeluaran:1001000, tujuan:'Beli Kebutuhan',       ket:'' },
-  { id:'t18', tanggal:'2026-01-22', pemasukan:450000,  sumber:'Bagi Hasil',       pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'' },
-  { id:'t19', tanggal:'2026-02-02', pemasukan:28000,   sumber:'Jasa Freelance',   pengeluaran:100000,  tujuan:'Transfer Internal',    ket:'' },
-  { id:'t20', tanggal:'2026-02-05', pemasukan:500000,  sumber:'Penjualan',        pengeluaran:1500000, tujuan:'Transfer Internal',    ket:'' },
-  { id:'t21', tanggal:'2026-03-02', pemasukan:300000,  sumber:'Penjualan',        pengeluaran:300000,  tujuan:'Beli Kebutuhan',       ket:'' },
-];
-
-export const SEED_TAGIHAN = [
-  { id:'b1',  tanggal:'2025-12-01', nominal:270000,  alasan:'Indihome',      ket:'C.06',        batas:'2025-12-25', status:'Sudah dibayar' },
-  { id:'b2',  tanggal:'2025-12-02', nominal:135000,  alasan:'Iconnet',       ket:'',            batas:'2025-12-13', status:'Sudah dibayar' },
-  { id:'b3',  tanggal:'2025-12-03', nominal:350000,  alasan:'SPP/LPK',       ket:'',            batas:'2025-12-06', status:'Sudah dibayar' },
-  { id:'b4',  tanggal:'2025-12-04', nominal:200000,  alasan:'Token Listrik', ket:'Rumah',       batas:'2025-12-07', status:'Sudah dibayar' },
-  { id:'b5',  tanggal:'2025-12-16', nominal:203000,  alasan:'Token Listrik', ket:'',            batas:'2025-12-16', status:'Sudah dibayar' },
-  { id:'b6',  tanggal:'2026-01-04', nominal:203000,  alasan:'Token Listrik', ket:'Token Rumah', batas:'2026-01-04', status:'Sudah dibayar' },
-  { id:'b7',  tanggal:'2026-01-08', nominal:203000,  alasan:'Token Listrik', ket:'Token Bedeng',batas:'2026-01-08', status:'Sudah dibayar' },
-  { id:'b8',  tanggal:'2026-01-09', nominal:100000,  alasan:'Paket Internet',ket:'Paket bapak', batas:'2026-01-09', status:'Sudah dibayar' },
-  { id:'b9',  tanggal:'2026-01-10', nominal:276000,  alasan:'Indihome',      ket:'C.06',        batas:'2026-01-10', status:'Sudah dibayar' },
-  { id:'b10', tanggal:'2026-02-03', nominal:203000,  alasan:'Token Listrik', ket:'Rumah',       batas:'2026-02-03', status:'Sudah dibayar' },
-  { id:'b11', tanggal:'2026-02-04', nominal:400000,  alasan:'Indihome',      ket:'C6 dan C9',   batas:'2026-02-04', status:'Sudah dibayar' },
-  { id:'b12', tanggal:'2026-02-26', nominal:145000,  alasan:'BPJS',          ket:'',            batas:'2026-02-26', status:'Sudah dibayar' },
-  { id:'b13', tanggal:'2026-03-01', nominal:203000,  alasan:'Token Listrik', ket:'Angkringan',  batas:'2026-03-01', status:'Sudah dibayar' },
-  { id:'b14', tanggal:'2026-03-13', nominal:1030000, alasan:'Token Listrik', ket:'Rumah',       batas:'2026-03-13', status:'Sudah dibayar' },
-];
-
-export const SEED_PIUTANG = [
-  { id:'p1', dari:'Hadid', jumlah:550000,  ket:'Uang joki Skripsi dan pinjaman',          dibayar:0,      tglHutang:'2025-07-09', tglBayar:'2025-08-21', status:'Belum' },
-  { id:'p2', dari:'Arief', jumlah:700000,  ket:'Hutang Monitor',                          dibayar:400000, tglHutang:'2025-11-12', tglBayar:'2026-01-06', status:'Belum' },
-  { id:'p3', dari:'Ibuk',  jumlah:2500000, ket:'Mak Yusri 1,5 Juta dan 1 Juta angsuran', dibayar:0,      tglHutang:'2025-07-16', tglBayar:'',           status:'Belum' },
-  { id:'p4', dari:'ibuk',  jumlah:2000000, ket:'Mak Yusri 2 juta',                        dibayar:0,      tglHutang:'2025-12-05', tglBayar:'',           status:'Belum' },
-  { id:'p5', dari:'Hadid', jumlah:280000,  ket:'Uang Gym dan pegangan',                   dibayar:0,      tglHutang:'2026-01-08', tglBayar:'',           status:'Belum' },
-  { id:'p6', dari:'ibuk',  jumlah:1500000, ket:'Mak Yusri 1,5 Juta',                      dibayar:0,      tglHutang:'2026-01-12', tglBayar:'',           status:'Belum' },
-  { id:'p7', dari:'ibuk',  jumlah:2600000, ket:'Uang Qris dan Bayar Mak Yusri',           dibayar:0,      tglHutang:'2026-01-15', tglBayar:'',           status:'Belum' },
-];
-
-export const SEED_HUTANG = [];
-
-export const SEED_ASET = [
-  { id:'a1', nama:'Emas', jumlah:'3.5 unit', belitotal:7000000, platform:'Toko Emas', aktif:true, hargaPasar:0, catatan:'' },
-];
-
-export const SEED_SALDO_AWAL = 1401000;
-
-// ── WiFi seed data (from user's spreadsheet) ──────────────
-export const SEED_WIFI_ISP = [
-  {
-    id:'w1', nama:'Iconnet', idPelanggan:'None', paket:'10 Mbps', harga:214000,
-    alamat:'Perumahan Karya Abadi C.06', ssid:'ARDIAN',
-    password:'pekanbaru', ip:'192.168.10.1', userAdmin:'Epuser',
-    kataKunci:'pekanbaru', status:'Berhenti',
-  },
-  {
-    id:'w2', nama:'Indihome', idPelanggan:'111502249398', paket:'50 Mbps', harga:280000,
-    alamat:'Perumahan Karya Abadi C.06', ssid:'Surya4G',
-    password:'Surya12345', ip:'192.168.100.1', userAdmin:'Admin',
-    kataKunci:'admin', status:'Aktif',
-  },
-  {
-    id:'w3', nama:'Indihome', idPelanggan:'111502246547', paket:'50 Mbps', harga:280000,
-    alamat:'Perumahan Karya Abadi C.09', ssid:'ARDIAN4G',
-    password:'pekanbaru/pekanbaru123', ip:'192.168.1.1', userAdmin:'admin',
-    kataKunci:'pekanbaru123', status:'Aktif',
-  },
-];
-
-// Payment tracker: { ispId, tahun, bulan } → paid boolean
-export const SEED_WIFI_BAYAR = [
-  { id:'wb1', ispId:'w2', tahun:2026, bulan:1, lunas:true },
-  { id:'wb2', ispId:'w3', tahun:2026, bulan:1, lunas:true },
-  { id:'wb3', ispId:'w2', tahun:2026, bulan:2, lunas:true },
-  { id:'wb4', ispId:'w3', tahun:2026, bulan:2, lunas:true },
-];
-
-// Default user categories (seeded when new account registered)
-export const SEED_KATEGORI = {
-  sumber: [...DEFAULT_SUMBER],
-  tujuan: [...DEFAULT_TUJUAN],
+  pengaturan: 'Pengaturan',
 };
 
 export const CHART_COLORS = ['#2563eb','#059669','#7c3aed','#ea580c','#d97706','#dc2626'];
+
+// ── Data Dummy untuk akun baru (generik) ──────────────────
+export const DUMMY_TRANSAKSI = [
+  { id:'dt1',  tanggal:'2026-01-05', pemasukan:3500000, sumber:'Gaji Tambahan',    pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Gaji bulan Januari' },
+  { id:'dt2',  tanggal:'2026-01-08', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:450000,  tujuan:'Beli Kebutuhan',        ket:'Belanja bulanan' },
+  { id:'dt3',  tanggal:'2026-01-12', pemasukan:750000,  sumber:'Jasa Freelance',   pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Desain logo' },
+  { id:'dt4',  tanggal:'2026-01-15', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:200000,  tujuan:'Minyak',                ket:'Bensin motor' },
+  { id:'dt5',  tanggal:'2026-01-20', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:350000,  tujuan:'Keperluan Keluarga',    ket:'Kebutuhan rumah' },
+  { id:'dt6',  tanggal:'2026-02-05', pemasukan:3500000, sumber:'Gaji Tambahan',    pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Gaji bulan Februari' },
+  { id:'dt7',  tanggal:'2026-02-10', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:500000,  tujuan:'Beli Kebutuhan',        ket:'Belanja bulanan' },
+  { id:'dt8',  tanggal:'2026-02-14', pemasukan:500000,  sumber:'Penjualan Online', pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Jual barang bekas' },
+  { id:'dt9',  tanggal:'2026-02-20', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:180000,  tujuan:'Minyak',                ket:'Bensin' },
+  { id:'dt10', tanggal:'2026-03-05', pemasukan:3500000, sumber:'Gaji Tambahan',    pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Gaji bulan Maret' },
+  { id:'dt11', tanggal:'2026-03-08', pemasukan:0,       sumber:'Tidak ada',        pengeluaran:420000,  tujuan:'Beli Kebutuhan',        ket:'Belanja bulanan' },
+  { id:'dt12', tanggal:'2026-03-12', pemasukan:1200000, sumber:'Jasa Freelance',   pengeluaran:0,       tujuan:'Tidak ada pengeluaran', ket:'Proyek website' },
+];
+
+export const DUMMY_TAGIHAN = [
+  { id:'dta1', tanggal:'2026-01-01', nominal:200000, alasan:'Token Listrik', ket:'Rumah',   batas:'2026-01-10', status:'Sudah dibayar' },
+  { id:'dta2', tanggal:'2026-01-05', nominal:300000, alasan:'Indihome',      ket:'',        batas:'2026-01-15', status:'Sudah dibayar' },
+  { id:'dta3', tanggal:'2026-01-20', nominal:150000, alasan:'BPJS',          ket:'',        batas:'2026-01-25', status:'Sudah dibayar' },
+  { id:'dta4', tanggal:'2026-02-01', nominal:200000, alasan:'Token Listrik', ket:'Rumah',   batas:'2026-02-10', status:'Sudah dibayar' },
+  { id:'dta5', tanggal:'2026-02-05', nominal:300000, alasan:'Indihome',      ket:'',        batas:'2026-02-15', status:'Sudah dibayar' },
+  { id:'dta6', tanggal:'2026-03-01', nominal:200000, alasan:'Token Listrik', ket:'Rumah',   batas:'2026-03-10', status:'Sudah dibayar' },
+  { id:'dta7', tanggal:'2026-03-05', nominal:300000, alasan:'Indihome',      ket:'',        batas:'2026-03-15', status:'Belum dibayar' },
+  { id:'dta8', tanggal:'2026-03-20', nominal:150000, alasan:'BPJS',          ket:'',        batas:'2026-03-25', status:'Belum dibayar' },
+];
+
+export const DUMMY_PIUTANG = [
+  { id:'dp1', dari:'Budi',   jumlah:500000,  ket:'Pinjam uang makan',         dibayar:200000, tglHutang:'2026-01-10', tglBayar:'', status:'Belum' },
+  { id:'dp2', dari:'Sari',   jumlah:300000,  ket:'Patungan beli kado',         dibayar:300000, tglHutang:'2026-01-20', tglBayar:'2026-02-01', status:'Lunas' },
+  { id:'dp3', dari:'Randi',  jumlah:1000000, ket:'Pinjam modal usaha kecil',   dibayar:0,      tglHutang:'2026-02-05', tglBayar:'', status:'Belum' },
+];
+
+export const DUMMY_HUTANG = [
+  { id:'dh1', dari:'Pak Arif', jumlah:2000000, ket:'Pinjam biaya darurat',    dibayar:500000, tglHutang:'2025-12-01', tglBayar:'', status:'Belum' },
+];
+
+export const DUMMY_ASET = [
+  { id:'da1', nama:'Emas Logam Mulia', jumlah:'5 gram', belitotal:5000000, platform:'Pegadaian', aktif:true, hargaPasar:5750000, catatan:'Beli Desember 2025' },
+  { id:'da2', nama:'Reksa Dana',       jumlah:'100 unit', belitotal:1000000, platform:'Bibit',   aktif:true, hargaPasar:1120000, catatan:'NAV naik terus' },
+];
+
+export const DUMMY_SALDO_AWAL = 2000000;
+
+export const DUMMY_WIFI_ISP = [
+  {
+    id:'dw1', nama:'Indihome', idPelanggan:'123456789', paket:'50 Mbps', harga:300000,
+    alamat:'Jl. Contoh No.1', ssid:'RumahKu_5G',
+    password:'password123', ip:'192.168.1.1', userAdmin:'admin',
+    kataKunci:'admin', status:'Aktif',
+  },
+];
+
+export const DUMMY_WIFI_BAYAR = [
+  { id:'dwb1', ispId:'dw1', tahun:2026, bulan:1, lunas:true },
+  { id:'dwb2', ispId:'dw1', tahun:2026, bulan:2, lunas:true },
+];
+
+export const DUMMY_KATEGORI = {
+  sumber: [...DEFAULT_SUMBER],
+  tujuan: [...DEFAULT_TUJUAN],
+};

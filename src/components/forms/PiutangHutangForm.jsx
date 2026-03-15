@@ -4,15 +4,16 @@
 import { useState } from 'react';
 import Modal from '../Modal';
 import RupiahInput from '../RupiahInput';
-import { STATUS_HUTANG } from '../../utils/constants';
 import { genId, today } from '../../utils/helpers';
+
+const STATUS_OPTIONS = ['Belum', 'Lunas', 'Tidak Ada'];
 
 const DEFAULT = (mode) => ({
   dari:      '',
   nama:      '',
-  jumlah:    '',
+  jumlah:    0,
+  dibayar:   0,
   ket:       '',
-  dibayar:   '',
   tglHutang: today(),
   tglBayar:  '',
   status:    'Belum',
@@ -20,7 +21,6 @@ const DEFAULT = (mode) => ({
 
 export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
   const isPiutang = mode === 'piutang';
-
   const [form, setForm] = useState(item
     ? { ...item, jumlah: item.jumlah || 0, dibayar: item.dibayar || 0 }
     : DEFAULT(mode)
@@ -28,25 +28,17 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  // nama digunakan untuk hutang, dari untuk piutang — keduanya sama
-  const setNama = (e) => setForm((f) => ({
-    ...f,
-    dari: e.target.value,
-    nama: e.target.value,
-  }));
-
   const handleSave = () => {
     onSave({
       ...form,
       id:      form.id || genId(),
       jumlah:  Number(form.jumlah)  || 0,
       dibayar: Number(form.dibayar) || 0,
+      // piutang pakai field 'dari', hutang juga pakai 'dari'
       dari:    form.dari || form.nama || '',
-      nama:    form.nama || form.dari || '',
+      nama:    form.dari || form.nama || '',
     });
   };
-
-  const whoLabel = isPiutang ? 'Dari Siapa (yang berhutang ke kamu)' : 'Kepada Siapa (kamu berhutang ke)';
 
   return (
     <Modal
@@ -59,37 +51,36 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
     >
       <div className="form-grid">
         <div className="form-group full">
-          <label className="form-label">{whoLabel}</label>
+          <label className="form-label">
+            {isPiutang ? 'Nama Peminjam (yang berhutang ke kamu)' : 'Nama Pemberi Hutang (yang kamu hutangi)'}
+          </label>
           <input
             className="form-input"
-            placeholder="Nama orang"
+            placeholder={isPiutang ? 'Misal: Budi, Sari' : 'Misal: Pak Arif, Bank BRI'}
             value={form.dari || form.nama || ''}
-            onChange={setNama}
+            onChange={(e) => setForm((f) => ({ ...f, dari: e.target.value, nama: e.target.value }))}
           />
         </div>
 
         <div className="form-group">
-          <label className="form-label">Jumlah (Rp)</label>
-          <RupiahInput value={form.jumlah} onChange={v => setForm(f => ({ ...f, jumlah: v }))} />
+          <label className="form-label">Jumlah Pinjaman (Rp)</label>
+          <RupiahInput
+            value={form.jumlah}
+            onChange={(v) => setForm((f) => ({ ...f, jumlah: v }))}
+          />
         </div>
 
         <div className="form-group">
           <label className="form-label">Sudah Dibayar (Rp)</label>
-          <RupiahInput value={form.dibayar} onChange={v => setForm(f => ({ ...f, dibayar: v }))} />
-        </div>
-
-        <div className="form-group full">
-          <label className="form-label">Keterangan / Detail</label>
-          <input
-            className="form-input"
-            placeholder="Misal: Hutang monitor, pinjaman bulan lalu"
-            value={form.ket}
-            onChange={set('ket')}
+          <RupiahInput
+            value={form.dibayar}
+            onChange={(v) => setForm((f) => ({ ...f, dibayar: v }))}
+            placeholder="0"
           />
         </div>
 
         <div className="form-group">
-          <label className="form-label">Tanggal Hutang</label>
+          <label className="form-label">Tanggal Pinjam</label>
           <input
             type="date"
             className="form-input"
@@ -99,7 +90,7 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Tanggal Bayar / Target</label>
+          <label className="form-label">Tanggal Lunas / Target Bayar</label>
           <input
             type="date"
             className="form-input"
@@ -111,12 +102,39 @@ export default function PiutangHutangForm({ item, mode, onSave, onClose }) {
         <div className="form-group">
           <label className="form-label">Status</label>
           <select className="form-select" value={form.status} onChange={set('status')}>
-            {STATUS_HUTANG.map((o) => (
+            {STATUS_OPTIONS.map((o) => (
               <option key={o} value={o}>{o}</option>
             ))}
           </select>
         </div>
+
+        <div className="form-group full">
+          <label className="form-label">Keterangan</label>
+          <input
+            className="form-input"
+            placeholder="Misal: Pinjam biaya makan, modal usaha, dll"
+            value={form.ket}
+            onChange={set('ket')}
+          />
+        </div>
       </div>
+
+      {/* Tampilkan sisa hutang secara realtime */}
+      {form.jumlah > 0 && (
+        <div style={{
+          marginTop: 12,
+          padding: '10px 14px',
+          borderRadius: 8,
+          background: (form.jumlah - form.dibayar) <= 0 ? 'var(--green-bg)' : 'var(--yellow-bg)',
+          border: `1px solid ${(form.jumlah - form.dibayar) <= 0 ? '#86efac' : '#fcd34d'}`,
+          fontSize: '0.82rem',
+          color: (form.jumlah - form.dibayar) <= 0 ? 'var(--green2)' : 'var(--yellow2)',
+          fontWeight: 600,
+        }}>
+          Sisa: Rp {Number(form.jumlah - form.dibayar).toLocaleString('id-ID')}
+          {(form.jumlah - form.dibayar) <= 0 ? ' ✓ Lunas' : ''}
+        </div>
+      )}
     </Modal>
   );
 }

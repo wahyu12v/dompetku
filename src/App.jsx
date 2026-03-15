@@ -13,7 +13,7 @@ import WifiPage          from './pages/WifiPage';
 import LaporanPage       from './pages/LaporanPage';
 import PengaturanPage    from './pages/PengaturanPage';
 
-function AppShell({ user, logout, changePassword }) {
+function AppShell({ user, logout, changePassword, updateName, resetData }) {
   const data = useData(user.username);
   const [page,        setPage]        = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,18 +27,23 @@ function AppShell({ user, logout, changePassword }) {
       case 'aset':       return <AsetPage          data={data} />;
       case 'wifi':       return <WifiPage          data={data} />;
       case 'laporan':    return <LaporanPage       data={data} />;
-      case 'pengaturan': return <PengaturanPage    data={data} changePassword={changePassword} />;
-      default:           return <DashboardPage     data={data} />;
+      case 'pengaturan': return (
+        <PengaturanPage
+          data={data}
+          user={user}
+          changePassword={changePassword}
+          updateName={updateName}
+          resetData={() => resetData(user.username)}
+        />
+      );
+      default: return <DashboardPage data={data} />;
     }
   };
 
   return (
     <div className="app-shell">
-      <Sidebar
-        user={user} page={page}
-        onNavigate={setPage} onLogout={logout}
-        open={sidebarOpen} onClose={() => setSidebarOpen(false)}
-      />
+      <Sidebar user={user} page={page} onNavigate={setPage} onLogout={logout}
+        open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main">
         <Topbar page={page} onMenuToggle={() => setSidebarOpen(v => !v)} />
         <div className="page">{renderPage()}</div>
@@ -48,7 +53,8 @@ function AppShell({ user, logout, changePassword }) {
 }
 
 export default function App() {
-  const { user, login, register, logout, changePassword } = useAuth();
+  const { user, login, register, logout, changePassword, updateName, resetData } = useAuth();
   if (!user) return <AuthPage onLogin={login} onRegister={register} />;
-  return <AppShell user={user} logout={logout} changePassword={changePassword} />;
+  return <AppShell user={user} logout={logout} changePassword={changePassword}
+    updateName={updateName} resetData={resetData} />;
 }

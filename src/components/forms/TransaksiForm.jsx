@@ -3,7 +3,7 @@
 // ============================================================
 import { useState } from 'react';
 import Modal from '../Modal';
-import { SUMBER_OPTIONS, TUJUAN_OPTIONS } from '../../utils/constants';
+import { DEFAULT_SUMBER as SUMBER_OPTIONS, DEFAULT_TUJUAN as TUJUAN_OPTIONS } from '../../utils/constants';
 import { genId, today } from '../../utils/helpers';
 
 const DEFAULT = {
