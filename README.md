@@ -41,6 +41,7 @@ dompetku/
 │   ├── pages/
 │   │   ├── AuthPage.jsx        # Login & Register
 │   │   ├── DashboardPage.jsx   # Ringkasan utama
+|   |   |── BudgetPage.jsx      # Atur budget
 │   │   ├── TransaksiPage.jsx   # Input & histori transaksi harian
 │   │   ├── TagihanPage.jsx     # Tagihan & pembayaran rutin
 │   │   ├── PiutangHutangPage.jsx # Tracker piutang & hutang
