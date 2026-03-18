@@ -1,4 +1,5 @@
 // import { useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 // import { useConfirm } from '../components/ConfirmDialog';
 
 // function useMobile(bp = 640) {
@@ -630,29 +631,56 @@ function PasswordInput({ value, onChange, placeholder }) {
 
 // ── Slide-up Panel (modal drawer) ─────────────────────────
 function Panel({ open, onClose, title, children }) {
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
   if (!open) return null;
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+
+  return createPortal(
+    <div style={{
+      position: 'fixed',
+      top: 0, left: 0,
+      width: '100%', height: '100%',
+      zIndex: 9999,
+      background: 'transparent',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 20, boxSizing: 'border-box',
+      animation: 'fadeOverlay 0.18s ease',
+    }}
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={onClose} />
       <div style={{
-        position: 'relative', background: 'var(--card)', borderRadius: '20px 20px 0 0',
-        width: '100%', maxWidth: 560, maxHeight: '88vh', overflowY: 'auto',
-        boxShadow: '0 -8px 40px rgba(0,0,0,0.2)',
-        animation: 'slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)',
+        position: 'relative', background: 'var(--card)',
+        borderRadius: 20, border: '1px solid var(--border2)',
+        width: '100%', maxWidth: 500,
+        maxHeight: 'calc(100vh - 60px)', overflowY: 'auto',
+        boxShadow: '0 24px 64px rgba(0,0,0,0.28)',
+        animation: 'scaleIn 0.22s cubic-bezier(0.34,1.56,0.64,1)',
       }}>
-        <style>{`@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }`}</style>
-        {/* Drag handle */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-          <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--border2)' }} />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 20px 16px' }}>
+        {/* Header */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          padding: '18px 22px 16px',
+          borderBottom: '1px solid var(--border)',
+          position: 'sticky', top: 0, background: 'var(--card)', zIndex: 1,
+          borderRadius: '20px 20px 0 0',
+        }}>
           <div style={{ fontWeight: 800, fontSize: '1.05rem' }}>{title}</div>
-          <button onClick={onClose} style={{ background: 'var(--bg3)', border: 'none', borderRadius: '50%', width: 30, height: 30, cursor: 'pointer', color: 'var(--text3)', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+          <button onClick={onClose} style={{
+            background: 'var(--bg3)', border: 'none', borderRadius: '50%',
+            width: 32, height: 32, cursor: 'pointer', color: 'var(--text3)',
+            fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--red-bg)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--bg3)'}
+          >✕</button>
         </div>
-        <div style={{ padding: '0 20px 32px' }}>{children}</div>
+        <div style={{ padding: '20px 22px 28px' }}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -832,13 +860,15 @@ function PanelData({ data, onClose }) {
 
   return (
     <div>
-      {/* Stats grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 20 }}>
+      {/* Stats 2-col horizontal */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 22 }}>
         {stats.map(s => (
-          <div key={s.label} style={{ background: s.bg, borderRadius: 12, padding: '12px 8px', textAlign: 'center', border: '1px solid rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '1.1rem', marginBottom: 3 }}>{s.icon}</div>
-            <div style={{ fontFamily: 'var(--mono)', fontWeight: 800, fontSize: '1.15rem', color: s.color }}>{s.v}</div>
-            <div style={{ fontSize: '0.65rem', color: 'var(--text3)', fontWeight: 600, marginTop: 1 }}>{s.label}</div>
+          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: s.bg, borderRadius: 12, padding: '11px 14px', border: '1px solid rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '1.15rem', flexShrink: 0 }}>{s.icon}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontFamily: 'var(--mono)', fontWeight: 800, fontSize: '1.1rem', color: s.color, lineHeight: 1 }}>{s.v}</div>
+              <div style={{ fontSize: '0.68rem', color: 'var(--text3)', fontWeight: 600, marginTop: 3 }}>{s.label}</div>
+            </div>
           </div>
         ))}
       </div>

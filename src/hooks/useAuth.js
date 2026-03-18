@@ -102,8 +102,49 @@ import { DEFAULT_SUMBER, DEFAULT_TUJUAN,
   DUMMY_ASET, DUMMY_SALDO_AWAL, DUMMY_WIFI_ISP, DUMMY_WIFI_BAYAR,
   DUMMY_KATEGORI, DUMMY_BUDGET,
 } from '../utils/constants';
+import { WAHYU_USERNAME, WAHYU_PASSWORD, WAHYU_NAME, WAHYU_DATA } from '../utils/seedWahyu';
+
+// ── Seed akun wahyu12v satu kali saat app pertama dibuka ──
+function seedWahyuIfNeeded() {
+  const SEED_KEY = 'dompetku_wahyu_seeded';
+  if (localStorage.getItem(SEED_KEY)) return; // sudah pernah di-seed
+
+  const users = Storage.getUsers();
+  if (users.find(u => u.username === WAHYU_USERNAME)) {
+    localStorage.setItem(SEED_KEY, '1');
+    return; // akun sudah ada
+  }
+
+  const wahyuUser = {
+    id:        'wahyu-fixed-id',
+    username:  WAHYU_USERNAME,
+    name:      WAHYU_NAME,
+    password:  WAHYU_PASSWORD,
+    createdAt: '2025-12-01',
+  };
+  Storage.setUsers([...users, wahyuUser]);
+
+  // Simpan semua data dari Excel
+  const u = WAHYU_USERNAME;
+  Storage.set(u, 'transaksi',  WAHYU_DATA.transaksi);
+  Storage.set(u, 'tagihan',    WAHYU_DATA.tagihan);
+  Storage.set(u, 'piutang',    WAHYU_DATA.piutang);
+  Storage.set(u, 'hutang',     WAHYU_DATA.hutang);
+  Storage.set(u, 'aset',       WAHYU_DATA.aset);
+  Storage.set(u, 'saldoAwal',  WAHYU_DATA.saldoAwal);
+  Storage.set(u, 'wifiIsp',    WAHYU_DATA.wifiIsp);
+  Storage.set(u, 'wifiBayar',  WAHYU_DATA.wifiBayar);
+  Storage.set(u, 'budget',     WAHYU_DATA.budget);
+  Storage.set(u, 'kategori',   WAHYU_DATA.kategori);
+  Storage.set(u, 'isDummy',    false);
+
+  localStorage.setItem(SEED_KEY, '1');
+}
 
 export function useAuth() {
+  // Jalankan seed satu kali
+  seedWahyuIfNeeded();
+
   const [user, setUser] = useState(() => Storage.getSession());
 
   const login = (username, password) => {
@@ -119,6 +160,8 @@ export function useAuth() {
     if (!username.trim()) return 'Username tidak boleh kosong';
     if (!name.trim())     return 'Nama tidak boleh kosong';
     if (password.length < 4) return 'Password minimal 4 karakter';
+    // Cegah username wahyu12v didaftarkan ulang
+    if (username.trim().toLowerCase() === WAHYU_USERNAME) return 'Username sudah dipakai';
     const users = Storage.getUsers();
     if (users.find(u => u.username === username)) return 'Username sudah dipakai';
 
