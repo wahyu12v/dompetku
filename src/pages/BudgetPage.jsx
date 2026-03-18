@@ -133,7 +133,7 @@ export default function BudgetPage({ data }) {
   };
 
   return (
-    <div className="fade-in" style={{ width: '100%', paddingBottom: 30 }}>
+    <div className="fade-in" style={{ maxWidth: '100%', boxSizing: 'border-box', paddingBottom: 30 }}>
       {ConfirmUI}
 
       {/* ── Header ── */}
@@ -207,7 +207,7 @@ export default function BudgetPage({ data }) {
             <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
               Pengeluaran tanpa budget bulan ini
             </div>
-            <div style={{ background: 'var(--card)', borderRadius: 14, border: '1px solid var(--border)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--card)', borderRadius: 14, border: '1px solid var(--border)' }}>
               {tanpaBudget.map(([kat, val], i) => (
                 <div key={kat} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 18px', borderBottom: i < tanpaBudget.length - 1 ? '1px solid var(--border)' : 'none' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>{kat}</span>

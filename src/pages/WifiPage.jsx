@@ -87,8 +87,8 @@ function IspCard({ isp, onEdit, onDelete }) {
   const statusColor = isp.status === 'Aktif' ? 'green' : isp.status === 'Berhenti' ? 'red' : 'yellow';
   const isAktif = isp.status === 'Aktif';
   return (
-    <div style={{ background: 'var(--card)', border: `1px solid ${isAktif ? 'var(--border)' : '#fca5a5'}`, borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', marginBottom: 16 }}>
-      <div style={{ height: 4, background: isAktif ? 'var(--blue)' : isp.status === 'Berhenti' ? 'var(--red)' : 'var(--yellow)' }} />
+    <div style={{ background: 'var(--card)', border: `1px solid ${isAktif ? 'var(--border)' : '#fca5a5'}`, borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.02)', marginBottom: 16, width: '100%', boxSizing: 'border-box' }}>
+      <div style={{ height: 4, borderTopLeftRadius: 15, borderTopRightRadius: 15, background: isAktif ? 'var(--blue)' : isp.status === 'Berhenti' ? 'var(--red)' : 'var(--yellow)' }} />
       
       {/* ── Card Header ── */}
       <div style={{ display: 'flex', flexDirection: mobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: mobile ? 'stretch' : 'flex-start', padding: '16px 18px', borderBottom: '1px solid var(--border)', gap: 12 }}>
@@ -255,7 +255,7 @@ export default function WifiPage({ data }) {
       )}
 
       {/* ── Tracker (hanya ISP aktif) ── */}
-      <div className="card" style={{ padding: 0, borderRadius: '16px', overflow: 'hidden' }}>
+      <div className="card" style={{ padding: 0, borderRadius: '16px', width: '100%', boxSizing: 'border-box' }}>
         {/* Header */}
         <div style={{ padding: '16px 18px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
           <div>
@@ -314,7 +314,7 @@ export default function WifiPage({ data }) {
           <div>
             {/* ISP Tab Selector */}
             {ispAktif.length > 1 && (
-              <div style={{ display: 'flex', gap: 8, padding: '12px 14px', borderBottom: '1px solid var(--border)', overflowX: 'auto', scrollbarWidth: 'none' }}>
+              <div style={{ display: 'flex', gap: 8, padding: '12px 14px', borderBottom: '1px solid var(--border)', overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
                 {ispAktif.map(isp => {
                   const active = isp.id === activeSelectedId;
                   return (

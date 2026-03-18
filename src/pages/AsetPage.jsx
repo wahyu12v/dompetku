@@ -290,7 +290,7 @@ export default function AsetPage({ data }) {
   const autoCount = aktif.filter(a => COINGECKO_MAP[a.jenisAset]).length;
 
   return (
-    <div className="fade-in" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflowX: 'hidden', paddingBottom: '30px' }}>
+    <div className="fade-in" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', paddingBottom: '30px' }}>
       {ConfirmUI}
 
       {/* ── Stat cards ── */}

@@ -64,6 +64,26 @@ export default function DashboardPage({ data }) {
 
   return (
     <div className="fade-in" style={{ paddingBottom: '30px' }}>
+      {/* ── CSS KHUSUS MOBILE ── */}
+      <style>{`
+        @media (max-width: 768px) {
+          /* Melepas batasan scroll (max-height) agar layar HP bisa digulir mulus ke bawah */
+          .scroll-mobile-fix {
+            max-height: none !important;
+            overflow-y: visible !important;
+          }
+          /* Tambahan margin agar antar baris tidak dempet */
+          .mobile-gap-fix {
+            margin-bottom: 16px !important;
+          }
+        }
+        @media (max-width: 400px) {
+          /* Memaksa card KPI tetap 2 kolom, tidak jadi list memanjang ke bawah */
+          .dash-kpi-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+      `}</style>
 
       {/* ── KPI Cards ── */}
       <div className="dash-kpi-grid mb-4" style={{ gap: '16px' }}>
@@ -83,23 +103,15 @@ export default function DashboardPage({ data }) {
         ))}
       </div>
 
-      {/* ── Charts Row (Tanpa Paksaan Tinggi) ── */}
-      <div
-  className="grid-2 mb-4"
-  style={{
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '16px',
-    alignItems: 'stretch'
-  }}
->
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* ── Charts Row (Menghapus inline style Grid yang kaku) ── */}
+      <div className="grid-2 mb-4 mobile-gap-fix">
+        <div className="card mobile-gap-fix" style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="card-title">Tren 6 Bulan Terakhir</div>
           <div style={{ flex: 1, minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <BarChartBulanan data={chartData} />
           </div>
         </div>
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="card-title">Kategori Pengeluaran Harian</div>
           <div style={{ flex: 1, minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PieChartKategori data={catData} />
@@ -107,25 +119,17 @@ export default function DashboardPage({ data }) {
         </div>
       </div>
 
-      {/* ── Bottom Row (Tanpa Paksaan Tinggi, dengan Scroll) ── */}
-      <div
-  className="grid-2"
-  style={{
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '16px',
-    alignItems: 'stretch'
-  }}
->
+      {/* ── Bottom Row (Menghapus inline style Grid yang kaku) ── */}
+      <div className="grid-2">
 
         {/* 1. Transaksi Terbaru */}
-       <div className="card" style={{ padding: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100%' }}>
+       <div className="card mobile-gap-fix" style={{ padding: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <div style={{ padding: '20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ fontSize: '0.95rem', fontWeight: 700 }}>Transaksi Terbaru</div>
             <span style={{ fontSize: '0.72rem', color: 'var(--text3)', background: 'var(--bg3)', padding: '4px 10px', borderRadius: '12px', fontWeight: 700 }}>10 terakhir</span>
           </div>
           
-          <div style={{ flex: 1, overflowY: 'auto', maxHeight: '380px' }}>
+          <div className="scroll-mobile-fix" style={{ flex: 1, overflowY: 'auto', maxHeight: '380px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 0 }}>
               <thead>
                 <tr>
@@ -156,7 +160,7 @@ export default function DashboardPage({ data }) {
         </div>
 
         {/* 2. Tagihan + Hutang Bulan Ini */}
-       <div className="card" style={{ padding: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100%' }}>
+       <div className="card" style={{ padding: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <div style={{ padding: '20px', borderBottom: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ fontSize: '0.95rem', fontWeight: 700 }}>Tagihan — {fullMonth(curMonth)}</div>
@@ -175,7 +179,7 @@ export default function DashboardPage({ data }) {
             )}
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', maxHeight: '380px', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="scroll-mobile-fix" style={{ flex: 1, overflowY: 'auto', maxHeight: '380px', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {tagihanBulanIni.length === 0 && hutangList.length === 0 ? (
               <div className="empty-state" style={{ padding: '40px 0', textAlign: 'center', margin: 'auto' }}>
                 <div className="empty-state-icon" style={{ fontSize: '2rem', marginBottom: '12px' }}>✅</div>

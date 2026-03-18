@@ -4,7 +4,7 @@
 // No.8: tahun dinamis dari data transaksi
 // No.2: saldo tidak ikutkan tagihan (konsisten dengan DashboardPage)
 // ============================================================
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import BarChartBulanan from '../components/charts/BarChartBulanan';
 import AreaChartSaldo from '../components/charts/AreaChartSaldo';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -83,6 +83,82 @@ function SectionHeader({ title, action }) {
   );
 }
 
+// ── CUSTOM DROPDOWN COMPONENT (Elegan & Modern) ──
+function CustomDropdown({ options, value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: 'relative', flex: '1 1 200px', minWidth: '160px' }}>
+      <div
+        onClick={() => setOpen(!open)}
+        style={{
+          width: '100%', backgroundColor: '#ffffff',
+          borderRadius: '24px', padding: '10px 16px',
+          fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)',
+          border: `1.5px solid ${open ? 'var(--accent2)' : 'var(--border)'}`,
+          boxShadow: open ? '0 0 0 3px rgba(2,132,199,0.12)' : '0 2px 6px rgba(0,0,0,0.04)',
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          transition: 'all 0.2s', userSelect: 'none'
+        }}
+      >
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {value || '📊 Semua Kategori'}
+        </span>
+        <span style={{ fontSize: '0.7rem', color: 'var(--text3)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', marginLeft: '8px' }}>▼</span>
+      </div>
+
+      {open && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 8,
+          background: '#ffffff', borderRadius: '16px', border: '1px solid var(--border)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)', zIndex: 100,
+          maxHeight: '260px', overflowY: 'auto', padding: '8px'
+        }}>
+          <div
+            onClick={() => { onChange(''); setOpen(false); }}
+            style={{
+              padding: '10px 14px', borderRadius: '10px', cursor: 'pointer',
+              fontSize: '0.85rem', fontWeight: 600, transition: 'background 0.15s',
+              background: value === '' ? 'var(--blue-bg)' : 'transparent',
+              color: value === '' ? 'var(--accent)' : 'var(--text)'
+            }}
+            onMouseEnter={e => { if (value !== '') e.currentTarget.style.background = 'var(--bg3)' }}
+            onMouseLeave={e => { if (value !== '') e.currentTarget.style.background = 'transparent' }}
+          >
+            📊 Semua Kategori
+          </div>
+          {options.map(k => (
+            <div
+              key={k}
+              onClick={() => { onChange(k); setOpen(false); }}
+              style={{
+                padding: '10px 14px', borderRadius: '10px', cursor: 'pointer',
+                fontSize: '0.85rem', fontWeight: 600, marginTop: '2px', transition: 'background 0.15s',
+                background: value === k ? 'var(--blue-bg)' : 'transparent',
+                color: value === k ? 'var(--accent)' : 'var(--text)',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+              }}
+              onMouseEnter={e => { if (value !== k) e.currentTarget.style.background = 'var(--bg3)' }}
+              onMouseLeave={e => { if (value !== k) e.currentTarget.style.background = 'transparent' }}
+            >
+              {k}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function LaporanPage({ data }) {
   const { transaksi, tagihan, saldoAwal, setSaldoAwal } = data;
   const mobile = useMobile();
@@ -157,7 +233,7 @@ export default function LaporanPage({ data }) {
     <div className="fade-in" style={{ width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
 
       {/* ── Toolbar Utama ── */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '20px', width: '100%' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '20px', width: '100%', zIndex: 10 }}>
         
         {/* Stepper Tahun */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#ffffff', padding: '4px 6px', borderRadius: '30px', border: '1px solid var(--border)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', flexShrink: 0 }}>
@@ -171,18 +247,12 @@ export default function LaporanPage({ data }) {
             style={{ width:32, height:32, borderRadius:'50%', border:'none', background:year>=maxYear?'transparent':'var(--bg3)', color:year>=maxYear?'var(--border2)':'var(--text)', cursor:year>=maxYear?'default':'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.9rem', transition: 'background 0.2s' }}>❯</button>
         </div>
 
-        {/* Filter Kategori */}
-        <div style={{ flex: '1 1 200px', minWidth: '160px' }}>
-          <select 
-            className="form-select" 
-            style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: '10px 16px', fontSize: '0.85rem', fontWeight: 600, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', backgroundPosition: 'right 14px center' }}
-            value={filterKat}
-            onChange={e => setFilterKat(e.target.value)}
-          >
-            <option value="">📊 Semua Kategori</option>
-            {allKategori.map(k => <option key={k} value={k}>{k}</option>)}
-          </select>
-        </div>
+        {/* Dropdown Kategori Baru yang Elegan */}
+        <CustomDropdown 
+          options={allKategori.filter(k => k !== '')} 
+          value={filterKat} 
+          onChange={setFilterKat} 
+        />
 
         {/* Saldo Awal */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#ffffff', padding: '8px 16px', borderRadius: '30px', border: '1px solid var(--border)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', flex: '1 1 250px', minWidth: '220px' }}>
@@ -240,9 +310,12 @@ export default function LaporanPage({ data }) {
           </div>
 
           <div style={{ display:'grid', gridTemplateColumns:mobile?'1fr':'repeat(auto-fit, minmax(320px, 1fr))', gap:20 }}>
+            {/* ── Tabel Detail 1: Transaksi Harian (Responsive Fix) ── */}
             <div className="card" style={{ padding:0, borderRadius:16, overflow:'hidden' }}>
               <div style={{ padding:'16px 18px', borderBottom:'1px solid var(--border)' }}><SectionHeader title="Transaksi Harian" /></div>
-              <div className="table-wrap">
+              
+              {/* Tampilan Desktop (Tabel) */}
+              <div className="table-wrap mobile-hide">
                 <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead>
                     <tr style={{ borderBottom:'2px solid var(--border)' }}>
@@ -267,11 +340,34 @@ export default function LaporanPage({ data }) {
                   </tbody>
                 </table>
               </div>
+
+              {/* Tampilan Mobile (Kartu agar tidak memaksa teks turun/horizontal scroll) */}
+              <div className="mobile-card-list" style={{ padding: '16px' }}>
+                {drillTx.length === 0 ? (
+                  <div style={{ textAlign:'center', color:'var(--text3)', padding:'20px', fontSize:'0.85rem' }}>Tidak ada data</div>
+                ) : [...drillTx].sort((a,b)=>a.tanggal.localeCompare(b.tanggal)).map(t => (
+                  <div key={t.id} style={{ padding: '14px', border: '1px solid var(--border)', borderRadius: 12, marginBottom: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.88rem' }}>{t.pemasukan > 0 ? t.sumber : t.tujuan}</span>
+                      <span style={{ fontWeight: 800, fontSize: '0.9rem', fontFamily: 'var(--mono)', color: t.pemasukan > 0 ? 'var(--green)' : 'var(--red)' }}>
+                        {t.pemasukan > 0 ? `+${fmtRp(t.pemasukan)}` : `-${fmtRp(t.pengeluaran)}`}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text3)', alignItems: 'center' }}>
+                      <span>📅 {t.tanggal}</span>
+                      {t.metodeBayar && <span style={{ background: 'var(--bg3)', padding: '2px 8px', borderRadius: 6, fontWeight: 600 }}>{t.metodeBayar}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
+            {/* ── Tabel Detail 2: Tagihan (Responsive Fix) ── */}
             <div className="card" style={{ padding:0, borderRadius:16, overflow:'hidden' }}>
               <div style={{ padding:'16px 18px', borderBottom:'1px solid var(--border)' }}><SectionHeader title="Tagihan & Kewajiban" /></div>
-              <div className="table-wrap">
+              
+              {/* Tampilan Desktop (Tabel) */}
+              <div className="table-wrap mobile-hide">
                 <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead>
                     <tr style={{ borderBottom:'2px solid var(--border)' }}>
@@ -299,6 +395,29 @@ export default function LaporanPage({ data }) {
                     }
                   </tbody>
                 </table>
+              </div>
+
+              {/* Tampilan Mobile (Kartu agar tidak maksa kolom) */}
+              <div className="mobile-card-list" style={{ padding: '16px' }}>
+                {drillTag.length === 0 ? (
+                  <div style={{ textAlign:'center', color:'var(--text3)', padding:'20px', fontSize:'0.85rem' }}>Tidak ada tagihan</div>
+                ) : drillTag.map(t => (
+                  <div key={t.id} style={{ padding: '14px', border: '1px solid var(--border)', borderRadius: 12, marginBottom: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.88rem' }}>{t.alasan}</span>
+                      <span style={{ fontWeight: 800, fontSize: '0.9rem', fontFamily: 'var(--mono)', color: 'var(--orange)' }}>
+                        {fmtRp(t.nominal)}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text3)' }}>{t.ket || 'Tanpa keterangan'}</span>
+                      {t.status==='Sudah dibayar'
+                        ? <span style={{ background:'var(--green-bg)', color:'var(--green)', padding:'3px 10px', borderRadius:20, fontSize:'0.7rem', fontWeight:700 }}>✓ Lunas</span>
+                        : <span style={{ background:'var(--orange-bg)', color:'var(--orange)', padding:'3px 10px', borderRadius:20, fontSize:'0.7rem', fontWeight:700 }}>Belum</span>
+                      }
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -340,7 +459,7 @@ export default function LaporanPage({ data }) {
             </div>
           )}
 
-          {/* Monthly table */}
+          {/* Monthly table (Tabel Utama 7 Kolom Tetap Diizinkan Scroll Horizontal Karena Angkanya Banyak) */}
           <div className="card" style={{ padding:0, borderRadius:16, overflow:'hidden' }}>
             <div style={{ padding:mobile?'14px 16px':'18px 24px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:8 }}>
               <div>
@@ -381,7 +500,6 @@ export default function LaporanPage({ data }) {
                     </tr>
                   ))}
                   
-                  {/* DIUBAH: Background transparan & Teks hitam tegas agar tidak kucel abu-abu */}
                   <tr style={{ borderTop:'2px solid var(--border)', background:'transparent' }}>
                     <td style={{ padding:'16px 20px', fontWeight:800, color:'var(--text)', textTransform:'uppercase', letterSpacing:'1px', fontSize:'0.78rem' }}>Total {year}</td>
                     <td style={{ padding:'16px 20px', textAlign:'right', fontFamily:'var(--mono)', fontWeight:800, fontSize:'0.9rem', color:'var(--blue)' }}>{fmtRp(totalPms)}</td>
