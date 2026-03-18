@@ -992,7 +992,6 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
   const { kategori, setKategori } = data;
   const sumber = kategori?.sumber || [];
   const tujuan = kategori?.tujuan || [];
-  const mobile = useMobile();
   const { confirm: showConfirm, ConfirmUI } = useConfirm();
 
   // Panel state

@@ -7,7 +7,7 @@ import Modal from '../components/Modal';
 import RupiahInput from '../components/RupiahInput';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp, fullMonth } from '../utils/format';
-import { filterByMonth, currentYearMonth, genId, sumBy } from '../utils/helpers';
+import { filterByMonth, genId, sumBy } from '../utils/helpers';
 import { TAGIHAN_OPTIONS } from '../utils/constants';
 
 function BudgetForm({ item, allKategori, onSave, onClose }) {

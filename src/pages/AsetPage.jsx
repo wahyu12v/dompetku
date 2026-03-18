@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import AsetForm, { JENIS_ASET } from '../components/forms/AsetForm';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp } from '../utils/format';
