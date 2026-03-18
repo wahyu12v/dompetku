@@ -544,7 +544,7 @@ import { createPortal } from 'react-dom';
 
 
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useConfirm } from '../components/ConfirmDialog';
 
 // ── Design tokens for setting rows ────────────────────────
