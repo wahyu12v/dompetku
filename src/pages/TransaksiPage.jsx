@@ -332,7 +332,7 @@
 import { useState, useMemo } from 'react';
 import Modal from '../components/Modal';
 import { useConfirm } from '../components/ConfirmDialog';
-import { fmtRp, fmtDate, monthName } from '../utils/format';
+import { fmtRp, fmtDate } from '../utils/format';
 import RupiahInput from '../components/RupiahInput';
 import { filterByMonth, sumBy, currentYearMonth, today, genId } from '../utils/helpers';
 import { METODE_BAYAR } from '../utils/constants';

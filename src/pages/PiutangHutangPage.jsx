@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import StatCard from '../components/StatCard';
 import PiutangHutangForm from '../components/forms/PiutangHutangForm';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp, fmtDate } from '../utils/format';

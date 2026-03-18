@@ -600,17 +600,6 @@ function SettingRow({ icon, color = 'blue', label, sub, right, onClick, last = f
   );
 }
 
-// ── Settings Group (card container) ───────────────────────
-function SettingsGroup({ title, children }) {
-  return (
-    <div style={{ marginBottom: 20 }}>
-      {title && <div style={{ fontSize: '0.68rem', fontWeight: 800, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: 8, paddingLeft: 4 }}>{title}</div>}
-      <div style={{ background: 'var(--card)', borderRadius: 16, overflow: 'hidden', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
-        {children}
-      </div>
-    </div>
-  );
-}
 
 // ── Password Input ─────────────────────────────────────────
 function PasswordInput({ value, onChange, placeholder }) {
