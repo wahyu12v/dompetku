@@ -4,12 +4,13 @@
   "private": true,
   "description": "Sistem Keuangan Pribadi - Web App",
   "dependencies": {
+    "@supabase/supabase-js": "^2.99.2",
+    "date-fns": "^3.3.1",
+    "lucide-react": "^0.363.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
-    "recharts": "^2.12.0",
-    "lucide-react": "^0.363.0",
-    "date-fns": "^3.3.1"
+    "recharts": "^2.12.0"
   },
   "devDependencies": {
     "react-scripts": "5.0.1"
@@ -20,10 +21,20 @@
     "preview": "serve -s build"
   },
   "eslintConfig": {
-    "extends": ["react-app"]
+    "extends": [
+      "react-app"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
