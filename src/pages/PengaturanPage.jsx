@@ -544,18 +544,8 @@ import { createPortal } from 'react-dom';
 
 
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useConfirm } from '../components/ConfirmDialog';
-
-function useMobile(bp = 640) {
-  const [mobile, setMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < bp);
-  useEffect(() => {
-    const h = () => setMobile(window.innerWidth < bp);
-    window.addEventListener('resize', h);
-    return () => window.removeEventListener('resize', h);
-  }, [bp]);
-  return mobile;
-}
 
 // ── Design tokens for setting rows ────────────────────────
 const ROW_COLORS = {
@@ -990,8 +980,8 @@ function PanelKategori({ title, icon, items, onAdd, onDelete, onEdit }) {
 // ── Main Page ──────────────────────────────────────────────
 export default function PengaturanPage({ data, user, changePassword, updateName, resetData }) {
   const { kategori, setKategori } = data;
-  const sumber = kategori?.sumber || [];
-  const tujuan = kategori?.tujuan || [];
+  const sumber = useMemo(() => kategori?.sumber || [], [kategori]);
+  const tujuan = useMemo(() => kategori?.tujuan || [], [kategori]);
   const { confirm: showConfirm, ConfirmUI } = useConfirm();
 
   // Panel state
