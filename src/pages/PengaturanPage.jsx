@@ -295,7 +295,9 @@ function PanelKategori({ title, icon, items, onAdd, onDelete, onEdit }) {
 export default function PengaturanPage({ data, user, changePassword, updateName, resetData }) {
   const { kategori, setKategori } = data;
   const sumber = useMemo(() => kategori?.sumber || [], [kategori]);
-  const tujuan = useMemo(() => kategori?.tujuan || [], [kategori]);
+  const tujuan    = useMemo(() => kategori?.tujuan    || [], [kategori]);
+  const katTagihan = useMemo(() => kategori?.tagihan   || [], [kategori]);
+  const katBudget  = useMemo(() => kategori?.budget    || [], [kategori]);
   const { confirm: showConfirm, ConfirmUI } = useConfirm();
 
   // Panel state
@@ -307,6 +309,12 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
   const addT = useCallback(v   => setKategori({...kategori, tujuan:[...tujuan,v]}),                    [kategori,tujuan,setKategori]);
   const delT = useCallback(idx => setKategori({...kategori, tujuan:tujuan.filter((_,i)=>i!==idx)}),   [kategori,tujuan,setKategori]);
   const edtT = useCallback((idx,v)=>{const a=[...tujuan];a[idx]=v;setKategori({...kategori,tujuan:a});},[kategori,tujuan,setKategori]);
+  const addTg = useCallback(v   => setKategori({...kategori, tagihan:[...katTagihan,v]}),                          [kategori,katTagihan,setKategori]);
+  const delTg = useCallback(idx => setKategori({...kategori, tagihan:katTagihan.filter((_,i)=>i!==idx)}),         [kategori,katTagihan,setKategori]);
+  const edtTg = useCallback((idx,v)=>{const a=[...katTagihan];a[idx]=v;setKategori({...kategori,tagihan:a});},[kategori,katTagihan,setKategori]);
+  const addBg = useCallback(v   => setKategori({...kategori, budget:[...katBudget,v]}),                            [kategori,katBudget,setKategori]);
+  const delBg = useCallback(idx => setKategori({...kategori, budget:katBudget.filter((_,i)=>i!==idx)}),           [kategori,katBudget,setKategori]);
+  const edtBg = useCallback((idx,v)=>{const a=[...katBudget];a[idx]=v;setKategori({...kategori,budget:a});},[kategori,katBudget,setKategori]);
 
   const handleReset = async () => {
     const ok = await showConfirm({ title: 'Reset Semua Data?', message: 'Semua data akan dihapus permanen. Tidak bisa dibatalkan!', type: 'danger' });
@@ -377,7 +385,9 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
             <span style={{ fontSize:'0.72rem', color:'var(--yellow2)', fontWeight:600 }}>Perubahan tidak mempengaruhi transaksi yang sudah ada</span>
           </div>
           <SettingRow icon="💰" color="blue"   label="Sumber Pemasukan"   sub={`${sumber.length} kategori`} onClick={()=>setPanel('sumber')} />
-          <SettingRow icon="💸" color="orange" label="Tujuan Pengeluaran" sub={`${tujuan.length} kategori`} onClick={()=>setPanel('tujuan')} last />
+          <SettingRow icon="💸" color="orange" label="Tujuan Pengeluaran" sub={`${tujuan.length} kategori`} onClick={()=>setPanel('tujuan')} />
+          <SettingRow icon="🧾" color="yellow"  label="Kategori Tagihan"   sub={`${katTagihan.length} kategori`} onClick={()=>setPanel('kattagihan')} />
+          <SettingRow icon="🎯" color="purple"  label="Kategori Budget"    sub={`${katBudget.length} kategori`} onClick={()=>setPanel('katbudget')} last />
         </div>
       </div>
 
@@ -385,7 +395,7 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontSize:'0.68rem', fontWeight:800, color:'var(--text3)', textTransform:'uppercase', letterSpacing:'1.2px', marginBottom:8, paddingLeft:4 }}>Data & Backup</div>
         <div style={{ background:'var(--card)', borderRadius:16, border:'1px solid var(--border)', boxShadow:'var(--shadow)' }}>
-          <SettingRow icon="📦" color="blue"  label="Export  Data" sub={`${totalRecords} total record tersimpan`} onClick={()=>setPanel('data')} first />
+          <SettingRow icon="📦" color="blue"  label="Export & Import Data" sub={`${totalRecords} total record tersimpan`} onClick={()=>setPanel('data')} first />
         </div>
       </div>
 
@@ -458,6 +468,12 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
       </Panel>
       <Panel open={panel==='tujuan'}   onClose={()=>setPanel(null)} title="💸 Tujuan Pengeluaran">
         <PanelKategori title="Tujuan" icon="💸" items={tujuan} onAdd={addT} onDelete={delT} onEdit={edtT} />
+      </Panel>
+      <Panel open={panel==='kattagihan'} onClose={()=>setPanel(null)} title="🧾 Kategori Tagihan">
+        <PanelKategori title="Tagihan" icon="🧾" items={katTagihan} onAdd={addTg} onDelete={delTg} onEdit={edtTg} />
+      </Panel>
+      <Panel open={panel==='katbudget'}  onClose={()=>setPanel(null)} title="🎯 Kategori Budget">
+        <PanelKategori title="Budget" icon="🎯" items={katBudget} onAdd={addBg} onDelete={delBg} onEdit={edtBg} />
       </Panel>
     </div>
   );

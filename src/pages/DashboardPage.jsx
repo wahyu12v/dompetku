@@ -130,32 +130,24 @@ export default function DashboardPage({ data }) {
           </div>
           
           <div className="scroll-mobile-fix" style={{ flex: 1, overflowY: 'auto', maxHeight: '380px' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 0 }}>
-              <thead>
-                <tr>
-                  <th style={{ position: 'sticky', top: 0, zIndex: 1 }}>Tanggal</th>
-                  <th style={{ position: 'sticky', top: 0, zIndex: 1 }}>Sumber / Tujuan</th>
-                  <th style={{ textAlign: 'right', position: 'sticky', top: 0, zIndex: 1 }}>Nominal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTx.length === 0 ? (
-                  <tr><td colSpan={3} style={{ textAlign: 'center', color: 'var(--text3)', padding: 40, fontSize: '0.85rem' }}>Belum ada transaksi</td></tr>
-                ) : recentTx.map(t => (
-                  <tr key={t.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '14px 20px', fontSize: '0.75rem', color: 'var(--text3)', whiteSpace: 'nowrap' }}>{fmtDate(t.tanggal)}</td>
-                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', fontWeight: 600, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {t.pemasukan > 0 ? t.sumber : t.tujuan}
-                    </td>
-                    <td style={{ padding: '14px 20px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <span style={{ fontFamily: 'var(--mono)', fontSize: '0.85rem', fontWeight: 700, color: t.pemasukan > 0 ? 'var(--green)' : 'var(--red)', background: t.pemasukan > 0 ? 'var(--green-bg)' : 'var(--red-bg)', padding: '4px 10px', borderRadius: '8px' }}>
-                        {t.pemasukan > 0 ? `+${fmtRp(t.pemasukan)}` : `-${fmtRp(t.pengeluaran)}`}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {recentTx.length === 0 ? (
+              <div style={{ textAlign: 'center', color: 'var(--text3)', padding: 40, fontSize: '0.85rem' }}>Belum ada transaksi</div>
+            ) : recentTx.map(t => {
+              const masuk = t.pemasukan > 0;
+              return (
+                <div key={t.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ flex: 1, minWidth: 0, marginRight: 12 }}>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {masuk ? t.sumber : t.tujuan}
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text3)', marginTop: 2 }}>{fmtDate(t.tanggal)}</div>
+                  </div>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: '0.85rem', fontWeight: 700, color: masuk ? 'var(--green)' : 'var(--red)', background: masuk ? 'var(--green-bg)' : 'var(--red-bg)', padding: '4px 10px', borderRadius: '8px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                    {masuk ? `+${fmtRp(t.pemasukan)}` : `-${fmtRp(t.pengeluaran)}`}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
