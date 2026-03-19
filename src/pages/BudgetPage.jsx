@@ -8,7 +8,6 @@ import RupiahInput from '../components/RupiahInput';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp, fullMonth } from '../utils/format';
 import { filterByMonth, genId, sumBy } from '../utils/helpers';
-import { TAGIHAN_OPTIONS } from '../utils/constants';
 
 function BudgetForm({ item, allKategori, onSave, onClose }) {
   const [form, setForm] = useState(item
@@ -101,9 +100,10 @@ export default function BudgetPage({ data }) {
   const curYear  = now.getFullYear();
   const curKey   = `${curYear}-${String(curMonth).padStart(2,'0')}`;
 
-  // Semua kategori yang bisa dibudget: tujuan transaksi + jenis tagihan
-  const tujuanList   = kategori?.tujuan || [];
-  const allKategori  = [...new Set([...tujuanList, ...TAGIHAN_OPTIONS])].sort();
+  // Semua kategori yang bisa dibudget: tujuan transaksi + kategori tagihan dari pengaturan
+  const tujuanList    = kategori?.tujuan   || [];
+  const tagihanList   = kategori?.tagihan  || [];
+  const allKategori   = [...new Set([...tujuanList, ...tagihanList])].sort();
 
   // Kategori yang belum ada budgetnya
   const kategoriBelumBudget = allKategori.filter(k => !budget.find(b => b.kategori === k));

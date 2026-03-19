@@ -77,7 +77,8 @@ function MiniStat({ label, value, color, sub, icon }) {
 
 export default function TagihanPage({ data }) {
   const { tagihan, upsertTagihan, removeTagihan, markTagihanPaid, upsertTransaksi, kategori } = data;
-  const tujuanKategori = kategori?.tujuan || [];
+  const tujuanKategori   = kategori?.tujuan   || [];
+  const tagihanKategori  = kategori?.tagihan  || [];
   const [modal, setModal] = useState(null);
   const [tab, setTab] = useState('semua');
   const { confirm: showConfirm, ConfirmUI } = useConfirm();
@@ -216,7 +217,7 @@ export default function TagihanPage({ data }) {
       </div>
 
       {/* No.5: pass tujuanKategori ke TagihanForm */}
-      {modal && <TagihanForm item={modal.item} onSave={handleSave} onClose={() => setModal(null)} tujuanKategori={tujuanKategori} />}
+      {modal && <TagihanForm item={modal.item} onSave={handleSave} onClose={() => setModal(null)} tujuanKategori={tujuanKategori} tagihanKategori={tagihanKategori} />}
     </div>
   );
 }
