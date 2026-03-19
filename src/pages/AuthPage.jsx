@@ -20,10 +20,10 @@ export default function AuthPage({ onLogin, onRegister }) {
     await new Promise((r) => setTimeout(r, 250));
 
     if (mode === 'login') {
-      const err = onLogin(form.username.trim(), form.password);
+      const err = await onLogin(form.username.trim(), form.password);
       if (err) setError(err);
     } else {
-      const err = onRegister(form.username.trim(), form.name.trim(), form.password);
+      const err = await onRegister(form.username.trim(), form.name.trim(), form.password);
       if (err) setError(err);
     }
 
