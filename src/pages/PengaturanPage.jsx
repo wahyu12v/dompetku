@@ -184,98 +184,6 @@ function PanelPassword({ changePassword, onClose }) {
   );
 }
 
-// ── Panel: Export ─────────────────────────────────────────
-function PanelData({ data, onClose }) {
-  const doExport = (type) => {
-    const exportData = { transaksi: data.transaksi, tagihan: data.tagihan, piutang: data.piutang, hutang: data.hutang, aset: data.aset, wifiIsp: data.wifiIsp, saldoAwal: data.saldoAwal, budget: data.budget, kategori: data.kategori, exportedAt: new Date().toISOString(), version: '2.0' };
-    let content, filename, mime;
-    if (type === 'json') {
-      content = JSON.stringify(exportData, null, 2);
-      filename = `dompetku_${new Date().toISOString().slice(0,10)}.json`;
-      mime = 'application/json';
-    } else {
-      const rows = [['Tanggal','Sumber','Pemasukan','Tujuan','Pengeluaran','MetodeBayar','Ket'], ...data.transaksi.map(t => [t.tanggal, t.sumber, t.pemasukan, t.tujuan, t.pengeluaran, t.metodeBayar||'', t.ket||''])];
-      content = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-      filename = `transaksi_${new Date().toISOString().slice(0,10)}.csv`;
-      mime = 'text/csv';
-    }
-    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([content], { type: mime })), download: filename });
-    a.click();
-  };
-
-  const stats = [
-    { label: 'Transaksi', v: data.transaksi?.length||0, color:'var(--blue)',   bg:'var(--blue-bg)',   icon:'⇄' },
-    { label: 'Tagihan',   v: data.tagihan?.length||0,   color:'var(--orange)', bg:'var(--orange-bg)', icon:'🧾' },
-    { label: 'Piutang',   v: data.piutang?.length||0,   color:'var(--yellow)', bg:'var(--yellow-bg)', icon:'💸' },
-    { label: 'Hutang',    v: data.hutang?.length||0,    color:'var(--red)',    bg:'var(--red-bg)',    icon:'🏦' },
-    { label: 'Aset',      v: data.aset?.length||0,      color:'var(--purple)', bg:'var(--purple-bg)', icon:'💎' },
-    { label: 'WiFi ISP',  v: data.wifiIsp?.length||0,   color:'var(--green)',  bg:'var(--green-bg)',  icon:'📶' },
-  ];
-
-  return (
-    <div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 22 }}>
-        {stats.map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: s.bg, borderRadius: 12, padding: '11px 14px', border: '1px solid rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '1.15rem', flexShrink: 0 }}>{s.icon}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: 'var(--mono)', fontWeight: 800, fontSize: '1.1rem', color: s.color, lineHeight: 1 }}>{s.v}</div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--text3)', fontWeight: 600, marginTop: 3 }}>{s.label}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 8 }}>Export</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {[
-          { type: 'json', icon: '📦', label: 'Export JSON — Backup Lengkap', sub: 'Semua data + aset + WiFi + budget. Bisa di-restore kembali.', hc: 'var(--accent)' },
-          { type: 'csv',  icon: '📋', label: 'Export CSV — Transaksi Saja',  sub: 'Kompatibel dengan Excel / Google Sheets', hc: 'var(--green)' },
-        ].map(btn => (
-          <button key={btn.type} onClick={() => doExport(btn.type)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 14px', background: 'var(--bg3)', border: '1.5px solid var(--border)', borderRadius: 12, cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left', width: '100%' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor=btn.hc; e.currentTarget.style.background='var(--blue-bg)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor='var(--border)'; e.currentTarget.style.background='var(--bg3)'; }}>
-            <div style={{ width:36, height:36, borderRadius:9, background:'var(--card)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.1rem', flexShrink:0, boxShadow:'var(--shadow)' }}>{btn.icon}</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '0.87rem', color: 'var(--text)' }}>{btn.label}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text3)', marginTop: 1 }}>{btn.sub}</div>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-  const stats = [
-    { label: 'Transaksi', v: data.transaksi?.length||0, color:'var(--blue)',   bg:'var(--blue-bg)',   icon:'⇄' },
-    { label: 'Tagihan',   v: data.tagihan?.length||0,   color:'var(--orange)', bg:'var(--orange-bg)', icon:'🧾' },
-    { label: 'Piutang',   v: data.piutang?.length||0,   color:'var(--yellow)', bg:'var(--yellow-bg)', icon:'💸' },
-    { label: 'Hutang',    v: data.hutang?.length||0,    color:'var(--red)',    bg:'var(--red-bg)',    icon:'🏦' },
-    { label: 'Aset',      v: data.aset?.length||0,      color:'var(--purple)', bg:'var(--purple-bg)', icon:'💎' },
-    { label: 'WiFi ISP',  v: data.wifiIsp?.length||0,   color:'var(--green)',  bg:'var(--green-bg)',  icon:'📶' },
-  ];
-
-  return (
-    <div>
-      {/* Stats 2-col horizontal */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 22 }}>
-        {stats.map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: s.bg, borderRadius: 12, padding: '11px 14px', border: '1px solid rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '1.15rem', flexShrink: 0 }}>{s.icon}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: 'var(--mono)', fontWeight: 800, fontSize: '1.1rem', color: s.color, lineHeight: 1 }}>{s.v}</div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--text3)', fontWeight: 600, marginTop: 3 }}>{s.label}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-    </div>
-  );
-}
-
 // ── Panel: Kategori ────────────────────────────────────────
 function PanelKategori({ title, icon, items, onAdd, onDelete, onEdit }) {
   const [newVal,  setNewVal]  = useState('');
@@ -417,9 +325,6 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontSize:'0.68rem', fontWeight:800, color:'var(--text3)', textTransform:'uppercase', letterSpacing:'1.2px', marginBottom:8, paddingLeft:4 }}>Data & Backup</div>
         <div style={{ background:'var(--card)', borderRadius:16, border:'1px solid var(--border)', boxShadow:'var(--shadow)' }}>
-          <SettingRow icon="📦" color="blue"  label="Export & Import Data" sub={`${totalRecords} total record tersimpan`} onClick={()=>setPanel('data')} first />
-          <SettingRow icon="⬇️" color="green" label="Export JSON"          sub="Backup lengkap semua data"  onClick={()=>{ const exportData={transaksi:data.transaksi,tagihan:data.tagihan,piutang:data.piutang,hutang:data.hutang,aset:data.aset,wifiIsp:data.wifiIsp,saldoAwal:data.saldoAwal,budget:data.budget,kategori:data.kategori,exportedAt:new Date().toISOString(),version:'2.0'}; const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'})),download:`dompetku_${new Date().toISOString().slice(0,10)}.json`}); a.click(); }} />
-          <SettingRow icon="📋" color="teal"  label="Export CSV"           sub="Hanya transaksi harian"     onClick={()=>{ const rows=[['Tanggal','Sumber','Pemasukan','Tujuan','Pengeluaran','MetodeBayar','Ket'],...data.transaksi.map(t=>[t.tanggal,t.sumber,t.pemasukan,t.tujuan,t.pengeluaran,t.metodeBayar||'',t.ket||''])]; const content=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n'); const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([content],{type:'text/csv'})),download:`transaksi_${new Date().toISOString().slice(0,10)}.csv`}); a.click(); }} last />
         </div>
       </div>
 
@@ -483,9 +388,6 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
       </Panel>
       <Panel open={panel==='password'} onClose={()=>setPanel(null)} title="Ganti Password">
         <PanelPassword changePassword={changePassword} onClose={()=>setPanel(null)} />
-      </Panel>
-      <Panel open={panel==='data'}     onClose={()=>setPanel(null)} title="Export & Import Data">
-        <PanelData data={data} onClose={()=>setPanel(null)} />
       </Panel>
       <Panel open={panel==='sumber'}   onClose={()=>setPanel(null)} title="💰 Sumber Pemasukan">
         <PanelKategori title="Sumber" icon="💰" items={sumber} onAdd={addS} onDelete={delS} onEdit={edtS} />
