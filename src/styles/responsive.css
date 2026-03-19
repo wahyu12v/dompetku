@@ -76,3 +76,9 @@
   .page { padding: 8px; }
   .wifi-isp-grid { grid-template-columns: 1fr !important; }
 }
+
+/* Fix scroll saat loading */
+  .page, .main {
+    touch-action: pan-y;
+    will-change: scroll-position;
+  }
