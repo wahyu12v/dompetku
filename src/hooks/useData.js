@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabase';
 import { DEFAULT_SUMBER, DEFAULT_TUJUAN } from '../utils/constants';
 
-// Helper: konversi field dari DB (snake_case) ke app (camelCase)
 function toTransaksi(r) {
-  return { id: r.id, tanggal: r.tanggal, pemasukan: r.pemasukan, sumber: r.sumber, pengeluaran: r.pengeluaran, tujuan: r.tujuan, ket: r.ket, metodeBayar: r.metode_bayar };
+  return { id: r.id, tanggal: r.tanggal, pemasukan: r.pemasukan, sumber: r.sumber, pengeluaran: r.pengeluaran, tujuan: r.tujuan, ket: r.ket, metodeBayar: r.metode_bayar, createdAt: r.created_at };
 }
 function toTagihan(r) {
-  return { id: r.id, tanggal: r.tanggal, nominal: r.nominal, alasan: r.alasan, ket: r.ket, batas: r.batas, status: r.status };
+  return { id: r.id, tanggal: r.tanggal, nominal: r.nominal, alasan: r.alasan, ket: r.ket, batas: r.batas, status: r.status, createdAt: r.created_at };
 }
 function toPiutang(r) {
-  return { id: r.id, dari: r.dari, jumlah: r.jumlah, ket: r.ket, dibayar: r.dibayar, tglHutang: r.tgl_hutang, tglBayar: r.tgl_bayar, status: r.status };
+  return { id: r.id, dari: r.dari, jumlah: r.jumlah, ket: r.ket, dibayar: r.dibayar, tglHutang: r.tgl_hutang, tglBayar: r.tgl_bayar, status: r.status, createdAt: r.created_at };
 }
 function toHutang(r) {
-  return { id: r.id, dari: r.dari, jumlah: r.jumlah, ket: r.ket, dibayar: r.dibayar, tglHutang: r.tgl_hutang, tglBayar: r.tgl_bayar, status: r.status };
+  return { id: r.id, dari: r.dari, jumlah: r.jumlah, ket: r.ket, dibayar: r.dibayar, tglHutang: r.tgl_hutang, tglBayar: r.tgl_bayar, status: r.status, createdAt: r.created_at };
 }
 function toAset(r) {
   return { id: r.id, nama: r.nama, jumlah: r.jumlah, belitotal: r.belitotal, platform: r.platform, aktif: r.aktif, hargaPasar: r.harga_pasar, catatan: r.catatan };
@@ -26,6 +25,18 @@ function toWifiBayar(r) {
 }
 function toBudget(r) {
   return { id: r.id, kategori: r.kategori, batas: r.batas };
+}
+
+// Sort: tanggal DESC, lalu createdAt DESC (untuk data tanggal sama)
+function sortByTanggal(arr) {
+  return [...arr].sort((a, b) => {
+    const tgl = b.tanggal?.localeCompare(a.tanggal || '') || 0;
+    if (tgl !== 0) return tgl;
+    // Sama tanggal → sort by createdAt
+    const ca = a.createdAt || '';
+    const cb = b.createdAt || '';
+    return cb.localeCompare(ca);
+  });
 }
 
 export function useData(username) {
@@ -41,13 +52,12 @@ export function useData(username) {
   const [kategori,   setKategoriSt]   = useState({ sumber: [...DEFAULT_SUMBER], tujuan: [...DEFAULT_TUJUAN] });
   const [loading,    setLoading]      = useState(true);
 
-  // Load semua data saat login
   useEffect(() => {
     if (!username) return;
     setLoading(true);
     Promise.all([
-      supabase.from('transaksi').select('*').eq('username', username),
-      supabase.from('tagihan').select('*').eq('username', username),
+      supabase.from('transaksi').select('*').eq('username', username).order('tanggal', { ascending: false }).order('created_at', { ascending: false }),
+      supabase.from('tagihan').select('*').eq('username', username).order('tanggal', { ascending: false }),
       supabase.from('piutang').select('*').eq('username', username),
       supabase.from('hutang').select('*').eq('username', username),
       supabase.from('aset').select('*').eq('username', username),
@@ -66,7 +76,12 @@ export function useData(username) {
       setWifiIspSt((wisp.data || []).map(toWifiIsp));
       setWifiBayarSt((wbyr.data || []).map(toWifiBayar));
       setBudgetSt((bud.data || []).map(toBudget));
-      if (kat.data) setKategoriSt({ sumber: kat.data.sumber || [...DEFAULT_SUMBER], tujuan: kat.data.tujuan || [...DEFAULT_TUJUAN] });
+      if (kat.data) setKategoriSt({
+        sumber:  kat.data.sumber  || [...DEFAULT_SUMBER],
+        tujuan:  kat.data.tujuan  || [...DEFAULT_TUJUAN],
+        tagihan: kat.data.tagihan || [],
+        budget:  kat.data.budget  || [],
+      });
       setLoading(false);
     });
   }, [username]);
@@ -75,7 +90,10 @@ export function useData(username) {
   const upsertTransaksi = async (item) => {
     const row = { id: item.id, username, tanggal: item.tanggal, pemasukan: item.pemasukan, sumber: item.sumber, pengeluaran: item.pengeluaran, tujuan: item.tujuan, ket: item.ket, metode_bayar: item.metodeBayar };
     await supabase.from('transaksi').upsert(row);
-    setTransaksiSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [...prev, item]);
+    setTransaksiSt(prev => {
+      const updated = prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [item, ...prev];
+      return sortByTanggal(updated);
+    });
   };
   const removeTransaksi = async (id) => {
     await supabase.from('transaksi').delete().eq('id', id);
@@ -86,7 +104,10 @@ export function useData(username) {
   const upsertTagihan = async (item) => {
     const row = { id: item.id, username, tanggal: item.tanggal, nominal: item.nominal, alasan: item.alasan, ket: item.ket, batas: item.batas, status: item.status };
     await supabase.from('tagihan').upsert(row);
-    setTagihanSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [...prev, item]);
+    setTagihanSt(prev => {
+      const updated = prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [item, ...prev];
+      return sortByTanggal(updated);
+    });
   };
   const removeTagihan = async (id) => {
     await supabase.from('tagihan').delete().eq('id', id);
@@ -101,7 +122,7 @@ export function useData(username) {
   const upsertPiutang = async (item) => {
     const row = { id: item.id, username, dari: item.dari, jumlah: item.jumlah, ket: item.ket, dibayar: item.dibayar, tgl_hutang: item.tglHutang, tgl_bayar: item.tglBayar, status: item.status };
     await supabase.from('piutang').upsert(row);
-    setPiutangSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [...prev, item]);
+    setPiutangSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [item, ...prev]);
   };
   const removePiutang = async (id) => {
     await supabase.from('piutang').delete().eq('id', id);
@@ -112,7 +133,7 @@ export function useData(username) {
   const upsertHutang = async (item) => {
     const row = { id: item.id, username, dari: item.dari, jumlah: item.jumlah, ket: item.ket, dibayar: item.dibayar, tgl_hutang: item.tglHutang, tgl_bayar: item.tglBayar, status: item.status };
     await supabase.from('hutang').upsert(row);
-    setHutangSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [...prev, item]);
+    setHutangSt(prev => prev.some(x => x.id === item.id) ? prev.map(x => x.id === item.id ? item : x) : [item, ...prev]);
   };
   const removeHutang = async (id) => {
     await supabase.from('hutang').delete().eq('id', id);
@@ -182,7 +203,7 @@ export function useData(username) {
 
   // ── Kategori ──
   const setKategori = async (val) => {
-    await supabase.from('kategori').upsert({ username, sumber: val.sumber, tujuan: val.tujuan });
+    await supabase.from('kategori').upsert({ username, sumber: val.sumber, tujuan: val.tujuan, tagihan: val.tagihan || [], budget: val.budget || [] });
     setKategoriSt(val);
   };
 
