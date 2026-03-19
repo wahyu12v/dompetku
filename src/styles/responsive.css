@@ -77,8 +77,27 @@
   .wifi-isp-grid { grid-template-columns: 1fr !important; }
 }
 
-/* Fix scroll saat loading */
-  .page, .main {
-    touch-action: pan-y;
-    will-change: scroll-position;
+/* ── Mobile scroll performance fix ─────────────────────── */
+@media (max-width: 768px) {
+  .page {
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
   }
+
+  /* Prevent heavy repaints on scroll */
+  .card, .kpi-card, .stat-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Remove max-height that causes scroll lock */
+  .scroll-mobile-fix {
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+
+  /* Smooth touch scroll on inner scrollable areas */
+  .modal, .sidebar-nav {
+    -webkit-overflow-scrolling: touch;
+  }
+}
