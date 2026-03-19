@@ -140,6 +140,7 @@ a:hover { text-decoration: underline; }
   color: var(--text) !important;
 }
 
+
 /* ── Mobile scroll fix ─────────────────────────────────── */
 html, body {
   overflow-x: hidden;
