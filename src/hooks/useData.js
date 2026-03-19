@@ -27,15 +27,21 @@ function toBudget(r) {
   return { id: r.id, kategori: r.kategori, batas: r.batas };
 }
 
-// Sort: tanggal DESC, lalu createdAt DESC (untuk data tanggal sama)
+// Sort: tanggal DESC → createdAt DESC → id DESC (terbaru di atas)
 function sortByTanggal(arr) {
   return [...arr].sort((a, b) => {
-    const tgl = b.tanggal?.localeCompare(a.tanggal || '') || 0;
+    // 1. Sort by tanggal dulu
+    const tgl = (b.tanggal || '').localeCompare(a.tanggal || '');
     if (tgl !== 0) return tgl;
-    // Sama tanggal → sort by createdAt
+    // 2. Sama tanggal → sort by createdAt
     const ca = a.createdAt || '';
     const cb = b.createdAt || '';
-    return cb.localeCompare(ca);
+    if (ca && cb) {
+      const ct = cb.localeCompare(ca);
+      if (ct !== 0) return ct;
+    }
+    // 3. Fallback → sort by id (genId pakai Date.now().toString(36), lebih besar = lebih baru)
+    return (b.id || '').localeCompare(a.id || '');
   });
 }
 
