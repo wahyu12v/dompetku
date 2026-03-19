@@ -7,12 +7,8 @@ import {
   DUMMY_KATEGORI, DUMMY_BUDGET, DEFAULT_SUMBER, DEFAULT_TUJUAN,
 } from '../utils/constants';
 
-// Session disimpan di localStorage hanya untuk UX (tidak ada data sensitif di sini)
 const SESSION_KEY = 'dompetku_session';
-
-function getSession() {
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; }
-}
+function getSession() { try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; } }
 function setSession(user) { localStorage.setItem(SESSION_KEY, JSON.stringify(user)); }
 function clearSession() { localStorage.removeItem(SESSION_KEY); }
 
@@ -24,12 +20,12 @@ export function useAuth() {
       .from('users')
       .select('*')
       .eq('username', username)
-      .eq('password', password)
-      .single();
+      .eq('password', password);
 
-    if (error || !data) return 'Username atau password salah';
-    setSession(data);
-    setUser(data);
+    if (error || !data || data.length === 0) return 'Username atau password salah';
+    const found = data[0];
+    setSession(found);
+    setUser(found);
     return null;
   };
 
@@ -38,14 +34,12 @@ export function useAuth() {
     if (!name.trim())     return 'Nama tidak boleh kosong';
     if (password.length < 4) return 'Password minimal 4 karakter';
 
-    // Cek username sudah ada
     const { data: existing } = await supabase
       .from('users')
       .select('id')
-      .eq('username', username.trim())
-      .single();
+      .eq('username', username.trim());
 
-    if (existing) return 'Username sudah dipakai';
+    if (existing && existing.length > 0) return 'Username sudah dipakai';
 
     const newUser = {
       id: genId(),
@@ -58,17 +52,16 @@ export function useAuth() {
     const { error } = await supabase.from('users').insert(newUser);
     if (error) return 'Gagal mendaftar, coba lagi';
 
-    // Seed data dummy
     const u = username.trim();
-    await supabase.from('transaksi').insert(DUMMY_TRANSAKSI.map(t => ({ ...t, username: u, metode_bayar: t.metodeBayar })));
-    await supabase.from('tagihan').insert(DUMMY_TAGIHAN.map(t => ({ ...t, username: u })));
-    await supabase.from('piutang').insert(DUMMY_PIUTANG.map(t => ({ ...t, username: u, tgl_hutang: t.tglHutang, tgl_bayar: t.tglBayar })));
-    await supabase.from('hutang').insert(DUMMY_HUTANG.map(t => ({ ...t, username: u, tgl_hutang: t.tglHutang, tgl_bayar: t.tglBayar })));
-    await supabase.from('aset').insert(DUMMY_ASET.map(t => ({ ...t, username: u, harga_pasar: t.hargaPasar })));
+    await supabase.from('transaksi').insert(DUMMY_TRANSAKSI.map(t => ({ id: t.id, username: u, tanggal: t.tanggal, pemasukan: t.pemasukan, sumber: t.sumber, pengeluaran: t.pengeluaran, tujuan: t.tujuan, ket: t.ket, metode_bayar: t.metodeBayar })));
+    await supabase.from('tagihan').insert(DUMMY_TAGIHAN.map(t => ({ id: t.id, username: u, tanggal: t.tanggal, nominal: t.nominal, alasan: t.alasan, ket: t.ket, batas: t.batas, status: t.status })));
+    await supabase.from('piutang').insert(DUMMY_PIUTANG.map(t => ({ id: t.id, username: u, dari: t.dari, jumlah: t.jumlah, ket: t.ket, dibayar: t.dibayar, tgl_hutang: t.tglHutang, tgl_bayar: t.tglBayar, status: t.status })));
+    await supabase.from('hutang').insert(DUMMY_HUTANG.map(t => ({ id: t.id, username: u, dari: t.dari, jumlah: t.jumlah, ket: t.ket, dibayar: t.dibayar, tgl_hutang: t.tglHutang, tgl_bayar: t.tglBayar, status: t.status })));
+    await supabase.from('aset').insert(DUMMY_ASET.map(t => ({ id: t.id, username: u, nama: t.nama, jumlah: t.jumlah, belitotal: t.belitotal, platform: t.platform, aktif: t.aktif, harga_pasar: t.hargaPasar, catatan: t.catatan })));
     await supabase.from('saldo_awal').insert({ username: u, nilai: DUMMY_SALDO_AWAL });
-    await supabase.from('wifi_isp').insert(DUMMY_WIFI_ISP.map(t => ({ ...t, username: u, id_pelanggan: t.idPelanggan, user_admin: t.userAdmin, kata_kunci: t.kataKunci })));
-    await supabase.from('wifi_bayar').insert(DUMMY_WIFI_BAYAR.map(t => ({ ...t, username: u, isp_id: t.ispId })));
-    await supabase.from('budget').insert(DUMMY_BUDGET.map(t => ({ ...t, username: u })));
+    await supabase.from('wifi_isp').insert(DUMMY_WIFI_ISP.map(t => ({ id: t.id, username: u, nama: t.nama, id_pelanggan: t.idPelanggan, paket: t.paket, harga: t.harga, alamat: t.alamat, ssid: t.ssid, password: t.password, ip: t.ip, user_admin: t.userAdmin, kata_kunci: t.kataKunci, status: t.status })));
+    await supabase.from('wifi_bayar').insert(DUMMY_WIFI_BAYAR.map(t => ({ id: t.id, username: u, isp_id: t.ispId, tahun: t.tahun, bulan: t.bulan, lunas: t.lunas })));
+    await supabase.from('budget').insert(DUMMY_BUDGET.map(t => ({ id: t.id, username: u, kategori: t.kategori, batas: t.batas })));
     await supabase.from('kategori').insert({ username: u, sumber: DUMMY_KATEGORI.sumber, tujuan: DUMMY_KATEGORI.tujuan });
 
     const sessionUser = { ...newUser, isFirstLogin: true };
@@ -82,13 +75,8 @@ export function useAuth() {
   const changePassword = async (oldPassword, newPassword) => {
     if (oldPassword !== user.password) return 'Password lama salah';
     if (newPassword.length < 4) return 'Password baru minimal 4 karakter';
-
     const updated = { ...user, password: newPassword };
-    const { error } = await supabase
-      .from('users')
-      .update({ password: newPassword })
-      .eq('username', user.username);
-
+    const { error } = await supabase.from('users').update({ password: newPassword }).eq('username', user.username);
     if (error) return 'Gagal mengubah password';
     setSession(updated);
     setUser(updated);
@@ -97,13 +85,8 @@ export function useAuth() {
 
   const updateName = async (newName) => {
     if (!newName.trim()) return 'Nama tidak boleh kosong';
-
     const updated = { ...user, name: newName.trim() };
-    const { error } = await supabase
-      .from('users')
-      .update({ name: newName.trim() })
-      .eq('username', user.username);
-
+    const { error } = await supabase.from('users').update({ name: newName.trim() }).eq('username', user.username);
     if (error) return 'Gagal mengubah nama';
     setSession(updated);
     setUser(updated);
