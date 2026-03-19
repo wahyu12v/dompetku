@@ -14,20 +14,19 @@ const ROW_COLORS = {
   pink:   { bg: '#fce7f3', icon: '#db2777' },
 };
 
-// ── Setting Row (iOS-style) ────────────────────────────────
+// ── Setting Row (DIperbaiki: Tanpa useState agar tidak lag saat discroll) ──
 function SettingRow({ icon, color = 'blue', label, sub, right, onClick, first = false, last = false, danger = false }) {
-  const [hov, setHov] = useState(false);
   const c = ROW_COLORS[color] || ROW_COLORS.blue;
   return (
     <div
       onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+      onMouseEnter={e => { if (onClick) e.currentTarget.style.background = 'var(--bg3)'; }}
+      onMouseLeave={e => { if (onClick) e.currentTarget.style.background = 'transparent'; }}
       style={{
         display: 'flex', alignItems: 'center', gap: 14,
         padding: '13px 18px',
         borderBottom: last ? 'none' : '1px solid var(--border)',
-        background: hov && onClick ? 'var(--bg3)' : 'transparent',
+        background: 'transparent',
         cursor: onClick ? 'pointer' : 'default',
         transition: 'background 0.12s',
         borderTopLeftRadius: first ? 15 : 0,
@@ -48,6 +47,7 @@ function SettingRow({ icon, color = 'blue', label, sub, right, onClick, first = 
     </div>
   );
 }
+
 
 // ── Password Input ─────────────────────────────────────────
 function PasswordInput({ value, onChange, placeholder }) {
@@ -358,7 +358,7 @@ function PanelData({ data, onClose }) {
               <div style={{ fontSize: '0.75rem', color: 'var(--green2)', marginTop: 10, fontWeight: 600 }}>⚠ Import JSON akan menggantikan semua data yang ada sekarang.</div>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto', borderRadius: 8, border: '1px solid var(--border)', marginBottom: 12 }}>
+            <div style={{ overflowX: 'auto', borderRadius: 8, border: '1px solid var(--border)', marginBottom: 12, WebkitOverflowScrolling: 'touch' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem', minWidth: 400 }}>
                 <thead><tr style={{ background: 'var(--bg3)' }}>{['Tanggal','Sumber','Masuk','Tujuan','Keluar'].map(h=><th key={h} style={{ padding:'6px 10px', textAlign:'left', fontWeight:700, textTransform:'uppercase', fontSize:'0.62rem', color:'var(--text3)', borderBottom:'1px solid var(--border)' }}>{h}</th>)}</tr></thead>
                 <tbody>
@@ -530,8 +530,8 @@ export default function PengaturanPage({ data, user, changePassword, updateName,
         <div style={{ fontSize:'0.68rem', fontWeight:800, color:'var(--text3)', textTransform:'uppercase', letterSpacing:'1.2px', marginBottom:8, paddingLeft:4 }}>Data & Backup</div>
         <div style={{ background:'var(--card)', borderRadius:16, border:'1px solid var(--border)', boxShadow:'var(--shadow)' }}>
           <SettingRow icon="📦" color="blue"  label="Export & Import Data" sub={`${totalRecords} total record tersimpan`} onClick={()=>setPanel('data')} first />
-          <SettingRow icon="⬇️" color="green" label="Export JSON"          sub="Backup lengkap semua data"  onClick={()=>{ const exportData={transaksi:data.transaksi,tagihan:data.tagihan,piutang:data.piutang,hutang:data.hutang,aset:data.aset,wifiIsp:data.wifiIsp,saldoAwal:data.saldoAwal,exportedAt:new Date().toISOString()}; const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'})),download:`dompetku_${new Date().toISOString().slice(0,10)}.json`}); a.click(); }} />
-          <SettingRow icon="📋" color="teal"  label="Export CSV"           sub="Hanya transaksi harian"     onClick={()=>{ const rows=[['Tanggal','Sumber','Pemasukan','Tujuan','Pengeluaran','Ket'],...data.transaksi.map(t=>[t.tanggal,t.sumber,t.pemasukan,t.tujuan,t.pengeluaran,t.ket||''])]; const content=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n'); const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([content],{type:'text/csv'})),download:`transaksi_${new Date().toISOString().slice(0,10)}.csv`}); a.click(); }} last />
+          <SettingRow icon="⬇️" color="green" label="Export JSON"          sub="Backup lengkap semua data"  onClick={()=>{ const exportData={transaksi:data.transaksi,tagihan:data.tagihan,piutang:data.piutang,hutang:data.hutang,aset:data.aset,wifiIsp:data.wifiIsp,saldoAwal:data.saldoAwal,budget:data.budget,kategori:data.kategori,exportedAt:new Date().toISOString(),version:'2.0'}; const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'})),download:`dompetku_${new Date().toISOString().slice(0,10)}.json`}); a.click(); }} />
+          <SettingRow icon="📋" color="teal"  label="Export CSV"           sub="Hanya transaksi harian"     onClick={()=>{ const rows=[['Tanggal','Sumber','Pemasukan','Tujuan','Pengeluaran','MetodeBayar','Ket'],...data.transaksi.map(t=>[t.tanggal,t.sumber,t.pemasukan,t.tujuan,t.pengeluaran,t.metodeBayar||'',t.ket||''])]; const content=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n'); const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([content],{type:'text/csv'})),download:`transaksi_${new Date().toISOString().slice(0,10)}.csv`}); a.click(); }} last />
         </div>
       </div>
 

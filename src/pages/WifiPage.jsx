@@ -1,18 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Modal from '../components/Modal';
 import { useConfirm } from '../components/ConfirmDialog';
 import { fmtRp } from '../utils/format';
 import { genId, today } from '../utils/helpers';
 
-// ── Responsive hook ────────────────────────────────────────
+// ── Responsive hook (Dirombak Total: Anti-Lag Address Bar HP) ──
 function useMobile(bp = 600) {
-  const [mobile, setMobile] = useState(() => window.innerWidth < bp);
+  const [mobile, setMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(`(max-width: ${bp}px)`).matches;
+  });
+
   useEffect(() => {
-    const handler = () => setMobile(window.innerWidth < bp);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
+    const mql = window.matchMedia(`(max-width: ${bp}px)`);
+    const handler = (e) => setMobile(e.matches);
+    
+    // Menggunakan API modern yang sangat ringan dan tidak terpengaruh scroll vertikal HP
+    if (mql.addEventListener) {
+      mql.addEventListener('change', handler);
+    } else {
+      mql.addListener(handler); // Fallback browser lama
+    }
+    
+    return () => {
+      if (mql.removeEventListener) {
+        mql.removeEventListener('change', handler);
+      } else {
+        mql.removeListener(handler);
+      }
+    };
   }, [bp]);
+
   return mobile;
 }
 
@@ -149,24 +168,41 @@ export default function WifiPage({ data }) {
 
   const ispAktif = wifiIsp.filter(i => i.status === 'Aktif');
   const totalBulanan = ispAktif.reduce((s, i) => s + (i.harga || 0), 0);
-  // Mobile tracker: auto-select first ISP if none selected or selected ISP no longer active
+  
   const activeSelectedId = selectedIspId && ispAktif.find(i => i.id === selectedIspId)
     ? selectedIspId
     : ispAktif[0]?.id ?? null;
   const trackerIspMobile = ispAktif.find(i => i.id === activeSelectedId);
+
+  // ── CACHE KINERJA TINGGI: Menghindari lag saat scroll tabel ──
+  const paymentMap = useMemo(() => {
+    const map = {};
+    wifiBayar.forEach(x => {
+      if (x.tahun === tahunFilter && x.lunas) {
+        map[`${x.ispId}-${x.bulan}`] = true;
+      }
+    });
+    return map;
+  }, [wifiBayar, tahunFilter]);
+
+  const isPaid = useCallback((ispId, bulanIdx) => {
+    return !!paymentMap[`${ispId}-${bulanIdx + 1}`];
+  }, [paymentMap]);
+
+  const paidCount = useCallback((ispId) => {
+    let count = 0;
+    for (let i = 1; i <= 12; i++) {
+      if (paymentMap[`${ispId}-${i}`]) count++;
+    }
+    return count;
+  }, [paymentMap]);
+  // ─────────────────────────────────────────────────────────────
 
   const handleSave = (isp) => { upsertWifiIsp(isp); setModal(null); };
   const handleDel  = async (id) => {
     const ok = await showConfirm({ title: 'Hapus ISP', message: 'Data ISP dan semua catatan pembayarannya akan dihapus.', type: 'danger' });
     if (ok) removeWifiIsp(id);
   };
-
-  const isPaid = (ispId, bulanIdx) => {
-    const b = bulanIdx + 1;
-    return wifiBayar.some(x => x.ispId === ispId && x.tahun === tahunFilter && x.bulan === b && x.lunas);
-  };
-
-  const paidCount = (ispId) => BULAN.filter((_, bi) => isPaid(ispId, bi)).length;
 
   const handleToggle = (isp, bulanIdx) => {
     const wasPaid  = isPaid(isp.id, bulanIdx);
@@ -381,7 +417,7 @@ export default function WifiPage({ data }) {
           </div>
         ) : (
           /* ── DESKTOP: Full Table ── */
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
