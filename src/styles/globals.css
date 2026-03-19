@@ -139,32 +139,3 @@ a:hover { text-decoration: underline; }
   font-size: 13px !important;
   color: var(--text) !important;
 }
-
-
-/* ── Mobile scroll fix ─────────────────────────────────── */
-html, body {
-  overflow-x: hidden;
-}
-
-.page {
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
-}
-
-/* Prevent scroll jank on touch devices */
-.main {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-}
-
-/* Fix tables & horizontal scroll on mobile */
-.table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Prevent layout shift on mobile */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
