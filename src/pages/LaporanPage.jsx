@@ -488,7 +488,7 @@ export default function LaporanPage({ data }) {
                       <td style={{ padding:'14px 20px' }}>
                         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                           <span style={{ fontWeight:700, color:'var(--text)' }}>{m.fullLabel}</span>
-                          <span style={{ fontSize:'0.68rem', color:'var(--blue)', fontWeight:700, background:'var(--blue-bg)', padding:'2px 8px', borderRadius:12, opacity:0.8 }}>Detail ➔</span>
+                          <span style={{ fontSize:'0.68rem', color:'var(--blue)', fontWeight:700, background:'var(--blue-bg)', padding:'2px 8px', borderRadius:12, opacity:0.8 }}>Detail </span>
                         </div>
                       </td>
                       <td style={{ padding:'14px 20px', textAlign:'right', fontFamily:'var(--mono)', fontWeight:600, fontSize:'0.83rem', color:m.pemasukan>0?'var(--blue)':'var(--text3)' }}>{m.pemasukan>0?fmtRp(m.pemasukan):'—'}</td>
