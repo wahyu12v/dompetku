@@ -162,7 +162,7 @@ tr:hover td { background: var(--bg3); }
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: transparent;
+  background: rgba(15, 23, 42, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,10 +207,9 @@ tr:hover td { background: var(--bg3); }
 /* ── Confirm Dialog (custom alert) ──────────────────────── */
 .confirm-overlay {
   position: fixed; inset: 0;
-  background: transparent;
+  background: rgba(15, 23, 42, 0.5);
   display: flex; align-items: center; justify-content: center;
   z-index: 400; padding: 20px;
-  /* backdrop-filter removed per user request */
   animation: fadeOverlay 0.15s ease;
 }
 .confirm-box {

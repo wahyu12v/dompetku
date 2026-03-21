@@ -133,7 +133,7 @@ export default function AuthPage({ onLogin, onRegister }) {
         )}
 
         <p style={{ textAlign: 'center', fontSize: '0.68rem', color: 'var(--text3)', marginTop: 20 }}>
-          💾 Data tersimpan di browser — tidak dikirim ke server manapun
+          🔐 Data tersimpan aman di cloud — login diperlukan setiap sesi
         </p>
       </div>
     </div>

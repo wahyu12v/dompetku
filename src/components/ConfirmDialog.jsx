@@ -1,8 +1,12 @@
 // ============================================================
 // ConfirmDialog.jsx — Custom confirm dialog (replaces window.confirm)
 // Usage: useConfirm hook returns { confirm, ConfirmUI }
+// FIX: Pakai createPortal agar position:fixed tidak dipengaruhi
+// parent yang punya transform/overflow (penyebab dialog tidak muncul
+// di mobile pada halaman Transaksi, WiFi, dll)
 // ============================================================
 import { useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 
 export function useConfirm() {
   const [state, setState] = useState(null);
@@ -24,7 +28,7 @@ export function useConfirm() {
     setState(null);
   };
 
-  const ConfirmUI = state ? (
+  const ConfirmUI = state ? createPortal(
     <div className="confirm-overlay">
       <div className="confirm-box">
         <div className={`confirm-icon ${state.type}`}>
@@ -42,7 +46,8 @@ export function useConfirm() {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   ) : null;
 
   return { confirm, ConfirmUI };

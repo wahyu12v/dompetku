@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from './supabase';
 import { genId, today } from '../utils/helpers';
 import {
@@ -13,7 +13,13 @@ function setSession(user) { localStorage.setItem(SESSION_KEY, JSON.stringify(use
 function clearSession() { localStorage.removeItem(SESSION_KEY); }
 
 export function useAuth() {
-  const [user, setUser] = useState(() => getSession());
+  // No.6: Selalu mulai tanpa sesi — user harus login ulang setiap buka website
+  const [user, setUser] = useState(null);
+
+  // Bersihkan sisa sesi lama saat pertama kali load
+  useEffect(() => {
+    clearSession();
+  }, []);
 
   const login = async (username, password) => {
     const { data, error } = await supabase
