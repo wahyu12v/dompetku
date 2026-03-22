@@ -102,21 +102,47 @@ export default function TagihanPage({ data }) {
     let list = inMonth;
     if (tab === 'belum') list = list.filter(t => t.status !== 'Sudah dibayar');
     if (tab === 'sudah') list = list.filter(t => t.status === 'Sudah dibayar');
-    return [...list].sort((a, b) => (a.batas || '').localeCompare(b.batas || ''));
+    // Sort: tanggal terbaru di atas (DESC)
+    return [...list].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
   }, [inMonth, tab]);
 
   const totAll   = sumBy(inMonth, 'nominal');
   const totSudah = inMonth.filter(t => t.status === 'Sudah dibayar').reduce((s, x) => s + (x.nominal || 0), 0);
   const totBelum = totAll - totSudah;
 
-  const handleSave   = (item) => { upsertTagihan(item); setModal(null); };
+  const handleSave   = (item) => {
+    const itemLama = modal?.item; // data sebelum edit (null jika tambah baru)
+    const sudahBayarSebelum = itemLama?.status === 'Sudah dibayar';
+    const sudahBayarSekarang = item.status === 'Sudah dibayar';
+
+    upsertTagihan(item);
+    setModal(null);
+
+    // Auto-catat ke transaksi jika:
+    // - Tagihan BARU langsung dengan status "Sudah dibayar", ATAU
+    // - Tagihan DIEDIT dan statusnya BARU berubah jadi "Sudah dibayar"
+    if (sudahBayarSekarang && !sudahBayarSebelum) {
+      setKonfirmasi(item);
+    }
+  };
   const handleDelete = async (id) => {
     const ok = await showConfirm({ title: 'Hapus Tagihan', message: 'Tagihan ini akan dihapus permanen.', type: 'danger' });
     if (ok) removeTagihan(id);
   };
   const handlePaid = (t) => { markTagihanPaid(t.id); setKonfirmasi(t); };
   const handleKonfirmasiYes = () => {
-    upsertTransaksi({ id: genId(), tanggal: today(), pemasukan: 0, sumber: 'Tidak ada', pengeluaran: konfirmasi.nominal, tujuan: konfirmasi.alasan, ket: `Bayar ${konfirmasi.alasan}${konfirmasi.ket ? ' (' + konfirmasi.ket + ')' : ''}`, metodeBayar: 'Cash' });
+    // Gunakan tanggal tagihan (bukan today()) agar transaksi masuk ke bulan yang benar
+    const tglTransaksi = konfirmasi.tanggal || today();
+    upsertTransaksi({
+      id: genId(),
+      tanggal: tglTransaksi,
+      pemasukan: 0,
+      sumber: 'Tidak ada',
+      pengeluaran: konfirmasi.nominal,
+      tujuan: konfirmasi.alasan,
+      ket: `Bayar ${konfirmasi.alasan}${konfirmasi.ket ? ' (' + konfirmasi.ket + ')' : ''}`,
+      metodeBayar: 'Cash',
+    });
     setKonfirmasi(null);
   };
 
